@@ -1,5 +1,8 @@
 class Api {
-  final String getTopics = 'https://cnodejs.org/api/v1/topics?tab=all&page=1&limit=1';
+  final String getAdvertisementList = '/advertisementList';
+  final String getHot = '/hot';
+  final String getRecommend = '/recommend';
+  final String getReach = '/reach';
 }
 
 final api = new Api();

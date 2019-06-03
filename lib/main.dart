@@ -3,8 +3,6 @@ import 'package:yangyue/entry.dart';
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:yangyue/router/index.dart';
-// import 'package:dio/dio.dart';
-// import 'package:yangyue/config/network.dart';
 
 void main() {
   runApp(MyApp());

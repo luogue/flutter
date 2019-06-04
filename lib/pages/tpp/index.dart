@@ -80,36 +80,80 @@ class _IndexState extends State<Index> {
       //     )
       //   ],
       // )
-      body: Column(
-        children: <Widget>[
-          Flex(
-            direction: Axis.horizontal,
+        body: new Container(
+          margin: new EdgeInsets.symmetric(vertical: 20.0),
+          height: 200.0,
+          child: ListView(
+            scrollDirection: Axis.horizontal,
             children: <Widget>[
-              Text('即将上映'),
-              Text('全部')
-            ]
+              Container(
+                margin: new EdgeInsets.symmetric(vertical: 20.0),
+                width: 160.0,
+                color: Colors.red,
+              ),
+              Container(
+                margin: new EdgeInsets.symmetric(vertical: 20.0),
+                width: 160.0,
+                color: Colors.blue,
+              ),
+              Container(
+                margin: new EdgeInsets.symmetric(vertical: 20.0),
+                width: 160.0,
+                color: Colors.green,
+              ),
+              Container(
+                margin: new EdgeInsets.symmetric(vertical: 20.0),
+                width: 160.0,
+                color: Colors.yellow,
+              ),
+              Container(
+                margin: new EdgeInsets.symmetric(vertical: 20.0),
+                width: 160.0,
+                color: Colors.orange,
+              ),
+            ],
           ),
-          _renderItem(_advertisementList)
-          // _renderItem()
-          // ListView(
-          //   shrinkWrap: true,
-          //   children: <Widget>[
-          //     Container(
-          //       child: Text('数据')
-          //     )
-          //   ],
-          //   // children: list,
-          // )
-        ]
-      )
+        ),
+      // body: Column(
+      //   children: <Widget>[
+      //     Flex(
+      //       direction: Axis.horizontal,
+      //       children: <Widget>[
+      //         Text('即将上映'),
+      //         Text('全部')
+      //       ]
+      //     ),
+      //     ListView(
+      //       children: <Widget>[
+      //         Text('1'),
+      //         Text('1'),
+      //         Text('1'),
+      //         Text('1'),
+      //         Text('1'),
+      //         Text('1'),
+      //         Text('1'),
+      //         Text('1'),
+      //       ],
+      //     )
+      //     // _renderItem(_advertisementList)
+      //     // ListView(
+      //     //   shrinkWrap: true,
+      //     //   children: <Widget>[
+      //     //     Container(
+      //     //       child: Text('数据')
+      //     //     )
+      //     //   ],
+      //     //   // children: list,
+      //     // )
+      //   ]
+      // )
     );
   }
 }
 
 _renderItem(data) {
   print('_render=====================');
-  // print(data);
-  // print(data['list']);
+  // print(data[0]);
   // if (data == null) {
     data = {
       'list': [{}, {}, {}, {}, {}]
@@ -117,15 +161,24 @@ _renderItem(data) {
   // }
   List<Widget> list = [];
   data['list'].forEach((item) {
-    list.add(Container(
-      margin: EdgeInsets.only(top: 5),
-      width: 10,
-      height: 10,
-      // constraints: BoxConstraints.tightFor(width: 20.0, height: 15.0),
-      color: Colors.grey,
-    ));
+    // list.add(Container(
+    //   margin: EdgeInsets.only(top: 10),
+    //   width: 50,
+    //   height: 100,
+    //   // constraints: BoxConstraints.tightFor(width: 20.0, height: 15.0),
+    //   color: Colors.grey,
+    //   child: Text('加载中', textAlign: TextAlign.center, style: TextStyle( color: Colors.white ),)
+    // ));
+    list.add(Text('hello'));
   });
+  // return GridView(
+  //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+  //     crossAxisCount: 5, //横轴三个子widget
+  //     childAspectRatio: 1.0 //宽高比为1时，子widget
+  //   ),
   return ListView(
+    // scrollDirection: Axis.horizontal,
+    // scrollDirection: Axis.vertical,
     shrinkWrap: true,
     // children: <Widget>[
     //   Container(

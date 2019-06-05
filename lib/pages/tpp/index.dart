@@ -80,73 +80,40 @@ class _IndexState extends State<Index> {
       //     )
       //   ],
       // )
-        body: new Container(
+        body: Container(
           margin: new EdgeInsets.symmetric(vertical: 20.0),
-          height: 200.0,
+          height: 160.0,
           child: ListView(
             scrollDirection: Axis.horizontal,
             children: <Widget>[
               Container(
-                margin: new EdgeInsets.symmetric(vertical: 20.0),
-                width: 160.0,
+                margin: EdgeInsets.symmetric(horizontal: 3.0),
+                width: 120.0,
                 color: Colors.red,
               ),
               Container(
-                margin: new EdgeInsets.symmetric(vertical: 20.0),
-                width: 160.0,
+                margin: new EdgeInsets.symmetric(horizontal: 3.0),
+                width: 120.0,
                 color: Colors.blue,
               ),
               Container(
-                margin: new EdgeInsets.symmetric(vertical: 20.0),
-                width: 160.0,
+                margin: new EdgeInsets.symmetric(horizontal: 3.0),
+                width: 120.0,
                 color: Colors.green,
               ),
               Container(
-                margin: new EdgeInsets.symmetric(vertical: 20.0),
-                width: 160.0,
+                margin: new EdgeInsets.symmetric(horizontal: 3.0),
+                width: 120.0,
                 color: Colors.yellow,
               ),
               Container(
-                margin: new EdgeInsets.symmetric(vertical: 20.0),
-                width: 160.0,
+                margin: new EdgeInsets.symmetric(horizontal: 3.0),
+                width: 120.0,
                 color: Colors.orange,
               ),
             ],
           ),
         ),
-      // body: Column(
-      //   children: <Widget>[
-      //     Flex(
-      //       direction: Axis.horizontal,
-      //       children: <Widget>[
-      //         Text('即将上映'),
-      //         Text('全部')
-      //       ]
-      //     ),
-      //     ListView(
-      //       children: <Widget>[
-      //         Text('1'),
-      //         Text('1'),
-      //         Text('1'),
-      //         Text('1'),
-      //         Text('1'),
-      //         Text('1'),
-      //         Text('1'),
-      //         Text('1'),
-      //       ],
-      //     )
-      //     // _renderItem(_advertisementList)
-      //     // ListView(
-      //     //   shrinkWrap: true,
-      //     //   children: <Widget>[
-      //     //     Container(
-      //     //       child: Text('数据')
-      //     //     )
-      //     //   ],
-      //     //   // children: list,
-      //     // )
-      //   ]
-      // )
     );
   }
 }

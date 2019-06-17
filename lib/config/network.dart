@@ -9,8 +9,8 @@ Dio dio = new Dio(new BaseOptions(
 
 get(url) async {
   Response res = await dio.get(url);
-  print('get==========================');
-  print(res.data['data']);
+  // print('get==========================');
+  // print(res.data['data']);
   // 此处应该是一个居中的弹窗，鉴于flutter的奇特写法，暂且搁置
   // if (res.data['code'] == 0) {}
   if (res.statusCode == 200 && res.data['code'] == 0) return res.data['data'];
@@ -18,8 +18,7 @@ get(url) async {
 
 post(url, data) async {
   Response res = await dio.post(url, data: data);
-  print('post==========================');
-  print(res);
-  print(res.statusCode);
+  // print('post==========================');
+  // print(res);
   return res.data;
 }

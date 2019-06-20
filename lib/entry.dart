@@ -57,7 +57,7 @@ class MyDrawer extends StatelessWidget {
                       leading: const Icon(Icons.movie, color: Colors.deepOrange),
                       title: const Text('淘票票', style: TextStyle(color: Colors.deepOrange)),
                     ),
-                    onTap: () => Navigator.pushNamed(context, 'index'),
+                    onTap: () => Navigator.pushNamed(context, 'home'),
                   ),
                   // 微信：用于测试原生功能
                   GestureDetector(

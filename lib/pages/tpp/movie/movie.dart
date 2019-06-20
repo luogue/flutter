@@ -2,18 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:yangyue/api/api.dart';
 import 'package:yangyue/config/network.dart';
 
-class Index extends StatefulWidget {
-  Index({Key key}) : super(key: key);
+class Movie extends StatefulWidget {
+  Movie({Key key}) : super(key: key);
 
   @override
-  _IndexState createState() => new _IndexState();
+  _MovieState createState() => new _MovieState();
 }
 
-class _IndexState extends State<Index> {
+class _MovieState extends State<Movie> {
   Map _advertisementList;
   Map _hot;
   Map _reach;
   Map _performance;
+  int _selectedIndex = 1;
 
   @override
   void initState() {
@@ -59,15 +60,34 @@ class _IndexState extends State<Index> {
   }
 
   // 点击tab
-  _onItemTapped() {
-    print('???');
+  _onItemTapped(int index) {
+    String routeName;
+    if (_selectedIndex == index) return;
+    switch (index) {
+      case 0:
+        routeName = 'home';
+        break;
+      case 1:
+        routeName = 'movie';
+        break;
+      case 2:
+        routeName = 'video';
+        break;
+      case 3:
+        routeName = 'performance';
+        break;
+      case 4:
+        routeName = 'mine';
+        break;
+    }
+    Navigator.popAndPushNamed(context, routeName);
   }
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: AppBar(
-        title: Text('淘票票首页'),
+        title: Text('电影'),
         centerTitle: true,
       ),
       body: Container(
@@ -220,7 +240,9 @@ class _IndexState extends State<Index> {
           ]
         )
       ),
-      bottomNavigationBar: BottomNavigationBar( // 底部导航
+      // 底部导航
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.home), title: Text('首页'), backgroundColor: Colors.orange),
           BottomNavigationBarItem(icon: Icon(Icons.movie), title: Text('电影')),
@@ -228,9 +250,11 @@ class _IndexState extends State<Index> {
           BottomNavigationBarItem(icon: Icon(Icons.whatshot), title: Text('演出')),
           BottomNavigationBarItem(icon: Icon(Icons.spa), title: Text('我的')),
         ],
-        // currentIndex: _selectedIndex,
-        // fixedColor: Colors.blue,
-        onTap: _onItemTapped()
+        currentIndex: _selectedIndex,
+        fixedColor: Colors.orangeAccent,
+        onTap: (int index) {
+          _onItemTapped(index);
+        }
       ),
     );
   }

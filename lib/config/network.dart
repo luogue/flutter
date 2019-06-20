@@ -1,5 +1,6 @@
-// 通信配置
+import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:yangyue/components/toast.dart';
 
 Dio dio = new Dio(new BaseOptions(
   baseUrl: 'https://www.easy-mock.com/mock/5ce761defcd92434dcbd613c/tpp/api',
@@ -7,13 +8,24 @@ Dio dio = new Dio(new BaseOptions(
   receiveTimeout: 10000
 ));
 
-get(url) async {
+get(context, url) async {
   Response res = await dio.get(url);
   // print('get==========================');
   // print(res.data['data']);
-  // 此处应该是一个居中的弹窗，鉴于flutter的奇特写法，暂且搁置
-  // if (res.data['code'] == 0) {}
-  if (res.statusCode == 200 && res.data['code'] == 0) return res.data['data'];
+  if (res.statusCode == 200 && res.data['code'] == 0) {
+    Toast.toast(
+      context,
+      msg: '数据请求成功',
+      bgColor: Colors.deepOrange,
+      textColor: Colors.white
+    );
+    return res.data['data'];
+  } else {
+    Toast.toast(
+      null,
+      msg: res.statusMessage
+    );
+  }
 }
 
 post(url, data) async {

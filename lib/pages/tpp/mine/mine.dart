@@ -20,29 +20,29 @@ class _MineState extends State<Mine> {
   void initState() {
     super.initState();
     //初始化状态
-    _getAdvertisementList();
-    _getHot();
-    _getReach();
-    _getPerformance();
+    _getAdvertisementList(context);
+    _getHot(context);
+    _getReach(context);
+    _getPerformance(context);
   }
 
   // 获取广告列表
-  _getAdvertisementList() {
-    var res = get(api.getAdvertisementList);
+  _getAdvertisementList(context) {
+    var res = get(context, api.getAdvertisementList);
     res.then((data) {
       setState(() { _advertisementList = data; });
     }).catchError((e) { print(e); });
   }
   // 热映影片
-  _getHot() {
-    var res = get(api.getHot);
+  _getHot(context) {
+    var res = get(context, api.getHot);
     res.then((data) {
       setState(() { _hot = data; });
     }).catchError((e) { print(e); });
   }
   // // 即将上映
-  _getReach() {
-    var res = get(api.getReach);
+  _getReach(context) {
+    var res = get(context, api.getReach);
     res.then((data) {
       setState(() {
         _reach = data;
@@ -50,8 +50,8 @@ class _MineState extends State<Mine> {
     }).catchError((e) { print(e); });
   }
   // 热门演出
-  _getPerformance() {
-    var res = get(api.getPerformance);
+  _getPerformance(context) {
+    var res = get(context, api.getPerformance);
     res.then((data) {
       setState(() {
         _performance = data;

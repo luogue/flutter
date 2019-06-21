@@ -1,6 +1,35 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+class Message {
+  static void success(BuildContext context, String msg) {
+    Toast.toast(
+      context,
+      msg: msg,
+      bgColor: Color(0xCCF8DA22),
+      textColor: Colors.white,
+      // position: 'top'
+    );
+  }
+  static void warning(BuildContext context, String msg) {
+    Toast.toast(
+      context,
+      msg: msg,
+      bgColor: Color(0xCCD30100),
+      textColor: Colors.white
+    );
+  }
+  static void error(BuildContext context, String msg) {
+    Toast.toast(
+      context,
+      msg: msg,
+      bgColor: Color(0xCC000000),
+      textColor: Colors.white
+    );
+  }
+}
+
+
 class Toast {
   static OverlayEntry _overlayEntry; // toast靠它加到屏幕上
   static bool _showing = false;      // toast是否正在showing
@@ -51,9 +80,7 @@ class Toast {
                   padding: EdgeInsets.symmetric(horizontal: 40.0),
                   child: AnimatedOpacity(
                     opacity: _showing ? 1.0 : 0.0, //目标透明度
-                    duration: _showing
-                        ? Duration(milliseconds: 100)
-                        : Duration(milliseconds: 400),
+                    duration: _showing ? Duration(milliseconds: 100): Duration(milliseconds: 400),
                     child: _buildToastWidget(),
                   ),
                 )),
@@ -82,7 +109,7 @@ class Toast {
         color: _bgColor,
         child: Padding(
           // padding: EdgeInsets.symmetric(horizontal: _pdHorizontal, vertical: _pdVertical),
-          padding: EdgeInsets.all(18.0),
+          padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
           child: Text(
             _msg,
             style: TextStyle(
@@ -99,7 +126,7 @@ class Toast {
   static _calToastPosition(context) {
     var backResult;
     if(_toastPosition == 'top'){
-      backResult = MediaQuery.of(context).size.height * 1 / 4;
+      backResult = MediaQuery.of(context).size.height * 4 / 100;
     }else if(_toastPosition == 'center'){
       backResult = MediaQuery.of(context).size.height * 1 / 2;
     }else{

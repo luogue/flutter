@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:yangyue/api/api.dart';
 import 'package:yangyue/config/network.dart';
@@ -17,6 +18,7 @@ class _HomeState extends State<Home> {
   Map _performance;
   Map _recommend;
   int _selectedIndex = 0;
+  List<String> todos = ['hello', 'world'];
 
   @override
   void initState() {
@@ -98,23 +100,139 @@ class _HomeState extends State<Home> {
     Navigator.popAndPushNamed(context, routeName);
   }
 
+  // 获取fixed容器
+  // getFixed() {
+  //   OverlayEntry _overlayEntry;
+  //   OverlayState overlayState = Overlay.of(context);
+  //   if (_overlayEntry == null) {
+  //     _overlayEntry = OverlayEntry(
+  //       builder: (BuildContext context) => Positioned(
+  //         //top值，可以改变这个值来改变toast在屏幕中的位置
+  //         top: 10.0,
+  //         child: Container(
+  //             alignment: Alignment.center,
+  //             width: 100.0,
+  //             child: Padding(
+  //               padding: EdgeInsets.symmetric(horizontal: 40.0),
+  //               child: AnimatedOpacity(
+  //                 opacity: 1.0,
+  //                 child: Center(
+  //                   child: Card(
+  //                     color: Colors.white,
+  //                     child: Padding(
+  //                       padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
+  //                       child: Text('hellooooooooooooooooo'),
+  //                     ),
+  //                   ),
+  //                 )
+  //               ),
+  //             )),
+  //       )
+  //     );
+  //     overlayState.insert(_overlayEntry);
+  //   } else {
+  //     _overlayEntry.markNeedsBuild();
+  //   }
+  // }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: AppBar(
-        title: Text('淘票票首页'),
-        centerTitle: true,
-      ),
+      // appBar: AppBar(
+      //   title: Text('淘票票首页'),
+      //   centerTitle: true,
+      // ),
       body: Container(
         color: Color(0xFFEEEEEE),
         child: ListView(
+          padding: EdgeInsets.all(0),
           children: <Widget>[
+            /* header 组件
+             * 设计思路：
+             * 1、在顶部时显示地区和扫码图标
+             * 2、下滑展示搜索
+             * 3、切换时需要淡入淡出，需要滚动进入
+             *
+             * 布局思考：
+             * 1、顶部和下滑时都在同一个水平容器中
+             * 2、利用z-index进行布局，让透明时容器层级低于body，不透明时高于body
+             * 这样才能在顶部透明时点击到轮播图
+             * 
+             * 动画交互：
+             * 1、根据滚动距离和容器高度计算百分比，作为透明度
+             * 2、半透明薄膜在容器和元素之间
+             * 
+             **/
+            // getFixed(),
+            Container(
+              padding: EdgeInsets.fromLTRB(20.0, 30.0, 20.0, 0),
+              color: Colors.purple,
+              width: 100.0,
+              height: 70.0,
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  Container(
+                    child: Flex(
+                      // width: 1,
+                      direction: Axis.horizontal,
+                      children: <Widget>[
+                        Expanded(
+                          flex: 1,
+                          child: Text('成都', style: TextStyle(color: Colors.white))
+                        ),
+                        Expanded(
+                          flex: 0,
+                          child: Row(
+                            // mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              GestureDetector(
+                                child: Container(
+                                  margin: EdgeInsets.only(right: 10.0),
+                                  child: Icon(
+                                    Icons.all_out,
+                                    color: Colors.white,
+                                    size: 23.0
+                                  )
+                                ),
+                                onTap: () => Message.success(context, '扫描二维码')
+                              ),
+                              GestureDetector(
+                                child: Container(
+                                  margin: EdgeInsets.only(right: 10.0),
+                                  child: Icon(
+                                    Icons.date_range,
+                                    color: Colors.white,
+                                    size: 23.0
+                                  )
+                                ),
+                                onTap: () => Message.success(context, '日签')
+                              ),
+                              GestureDetector(
+                                child: Container(
+                                  margin: EdgeInsets.only(right: 10.0),
+                                  child: Icon(
+                                    Icons.search,
+                                    color: Colors.white,
+                                    size: 23.0
+                                  )
+                                ),
+                                onTap: () => Message.success(context, '搜索')
+                              )
+                            ]
+                          )
+                        ),
+                      ]
+                    )
+                  )
+                ]
+              )
+            ),
             // 轮播图
             Container(
-              // padding: EdgeInsets.only(bottom: 30.0),
               height: 245.0,
               color: Colors.orange,
-              child: _renderAdvertisement(_advertisementList)
+              child: _renderAdvertisement(context, _advertisementList)
             ),
             // 热映影片
             Container(
@@ -149,12 +267,7 @@ class _HomeState extends State<Home> {
                             ),
                             Icon(Icons.arrow_forward_ios, color: Color(0xFFA8A8A6), size: 12.0)
                           ]),
-                          // onTap: () => print('查看热映影片全部')
-                          // onTap: () => askedToLead(context)
-                          onTap: () => Toast.toast(
-                            context,
-                            msg: '大哥~你不是点到了我吗~'
-                          )
+                          onTap: () => Message.success(context, '查看热映电影列表')
                         )
                       )
                     ]
@@ -163,7 +276,7 @@ class _HomeState extends State<Home> {
                 Container(
                   margin: EdgeInsets.only(top: 18.0),
                   height: 240.0,
-                  child: _renderHot(_hot)
+                  child: _renderHot(context, _hot)
                 )
               ])
             ),
@@ -199,7 +312,7 @@ class _HomeState extends State<Home> {
                             ),
                             Icon(Icons.arrow_forward_ios, color: Color(0xFFA8A8A6), size: 12.0)
                           ]),
-                          onTap: () => print('查看即将上映全部')
+                          onTap: () => Message.success(context, '查看即将上映全部')
                         )
                       )
                     ]
@@ -208,7 +321,7 @@ class _HomeState extends State<Home> {
                 Container(
                   margin: EdgeInsets.only(top: 18.0),
                   height: 240.0,
-                  child: _renderReach(_reach)
+                  child: _renderReach(context, _reach)
                 )
               ])
             ),
@@ -244,7 +357,7 @@ class _HomeState extends State<Home> {
                             ),
                             Icon(Icons.arrow_forward_ios, color: Color(0xFFA8A8A6), size: 12.0)
                           ]),
-                          onTap: () => print('查看即将开始的全部演出')
+                          onTap: () => Message.success(context, '查看即将开始的全部演出')
                         )
                       )
                     ]
@@ -253,7 +366,7 @@ class _HomeState extends State<Home> {
                 Container(
                   margin: EdgeInsets.only(top: 18.0),
                   height: 240.0,
-                  child: _renderPerformance(_performance)
+                  child: _renderPerformance(context, _performance)
                 )
               ])
             )
@@ -281,16 +394,17 @@ class _HomeState extends State<Home> {
 }
 
 // 轮播图渲染函数
-_renderAdvertisement(data) {
+_renderAdvertisement(context, data) {
   if (data == null) return null;
   List<Widget> list = [];
   data['list'].forEach((item) {
     list.add(GestureDetector(
       child: Image(
-        width: 394.0,
-        image: NetworkImage(item['url'])
+        // width: 394.0,
+        image: NetworkImage(item['url']),
+        fit: BoxFit.cover
       ),
-      onTap: () => print('进入广告页面')
+      onTap: () => Message.warning(context, '我还没开发呢，点J8啊点')
     ));
   });
   return ListView(
@@ -301,7 +415,7 @@ _renderAdvertisement(data) {
 }
 
 // 热映影片渲染函数
-_renderHot(data) {
+_renderHot(context, data) {
   if (data == null) return null;
   List<Widget> list = [];
   data['list'].forEach((item) {
@@ -317,9 +431,10 @@ _renderHot(data) {
           // 电影图片
           child: GestureDetector(
             child: Image(
-              image: NetworkImage(item['url'])
+              image: NetworkImage(item['url']),
+              fit: BoxFit.cover
             ),
-            onTap: () => print('查看电影详情')
+            onTap: () => Message.success(context, item['name'])
           )
         ),
         Text(
@@ -338,7 +453,14 @@ _renderHot(data) {
           splashColor: Color(0xFFDDDDDD),
           child: Text(item['status'] == 0 ? '购票' : '预售'),
           shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-          onPressed: () => print('购买电影票')
+          onPressed: () {
+            FlutterErrorDetails();
+            if (item['status'] == 0) {
+              Message.success(context, item['name']);
+            } else {
+              Message.success(context, item['name']);
+            }
+          }
         )
       ])
     ));
@@ -367,7 +489,7 @@ _renderHot(data) {
                 Text('${data['total']}部', style: TextStyle(color: Color(0xFF999999)))
               ]
             ),
-            onTap: () => print('查看上映电影列表')
+            onTap: () => Message.success(context, '查看上映电影列表')
           )
       )
     ])
@@ -379,7 +501,7 @@ _renderHot(data) {
   );
 }
 // 即将上映渲染函数
-_renderReach(data) {
+_renderReach(context, data) {
   if (data == null) return null;
   List<Widget> list = [];
   data['list'].forEach((item) {
@@ -395,9 +517,10 @@ _renderReach(data) {
           // 电影图片
           child: GestureDetector(
             child: Image(
-              image: NetworkImage(item['url'])
+              image: NetworkImage(item['url']),
+              fit: BoxFit.cover
             ),
-            onTap: () => print('查看电影详情')
+            onTap: () => Message.success(context, item['name'])
           )
         ),
         Text(
@@ -426,7 +549,7 @@ _renderReach(data) {
         color: Color(0xFFDDDDDD),
         child: GestureDetector(
           child: Text('全部', style: TextStyle(color: Color(0xFF999999))),
-          onTap: () => print('查看即将上映列表')
+          onTap: () => Message.success(context, '查看即将上映列表')
         )
       )
     ])
@@ -439,7 +562,7 @@ _renderReach(data) {
 }
 
 // 即将上映渲染函数
-_renderPerformance(data) {
+_renderPerformance(context, data) {
   if (data == null) return null;
   List<Widget> list = [];
   data['list'].forEach((item) {
@@ -456,9 +579,10 @@ _renderPerformance(data) {
             // 演出图片
             child: GestureDetector(
               child: Image(
-                image: NetworkImage(item['url'])
+                image: NetworkImage(item['url']),
+                fit: BoxFit.cover
               ),
-              onTap: () => print('查看演出详情')
+              onTap: () => Message.success(context, item['name'])
             )
           ),
           Container(
@@ -491,7 +615,7 @@ _renderPerformance(data) {
         color: Color(0xFFDDDDDD),
         child: GestureDetector(
           child: Text('全部', style: TextStyle(color: Color(0xFF999999))),
-          onTap: () => print('查看即将演出列表')
+          onTap: () => Message.success(context, '查看即将演出列表')
         )
       )
     ])

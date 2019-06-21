@@ -10,27 +10,20 @@ Dio dio = new Dio(new BaseOptions(
 
 get(context, url) async {
   Response res = await dio.get(url);
-  // print('get==========================');
-  // print(res.data['data']);
   if (res.statusCode == 200 && res.data['code'] == 0) {
-    Toast.toast(
-      context,
-      msg: '数据请求成功',
-      bgColor: Colors.deepOrange,
-      textColor: Colors.white
-    );
+    Message.success(context, '数据请求成功');
     return res.data['data'];
   } else {
-    Toast.toast(
-      null,
-      msg: res.statusMessage
-    );
+    Message.success(context, res.statusMessage);
   }
 }
 
-post(url, data) async {
+post(context, url, data) async {
   Response res = await dio.post(url, data: data);
-  // print('post==========================');
-  // print(res);
-  return res.data;
+  if (res.statusCode == 200 && res.data['code'] == 0) {
+    Message.success(context, '数据请求成功');
+    return res.data['data'];
+  } else {
+    Message.success(context, res.statusMessage);
+  }
 }

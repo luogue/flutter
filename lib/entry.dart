@@ -1,6 +1,5 @@
 // 入口页
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class Entry extends StatelessWidget {
   Entry({Key key}) : super(key: key);
@@ -65,7 +64,7 @@ class MyDrawer extends StatelessWidget {
                       leading: const Icon(Icons.offline_bolt, color: Colors.deepOrange),
                       title: const Text('微信', style: TextStyle(color: Colors.deepOrange)),
                     ),
-                    onTap: ()=> Navigator.pushNamed(context, 'index'),
+                    onTap: ()=> Navigator.pushNamed(context, 'wechat'),
                   ),
                   // Flutter：用于测试 Flutter 的功能
                   GestureDetector(

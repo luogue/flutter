@@ -24,6 +24,20 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
   dio: ^2.1.5
+  # 获取本地文件
+  path_provider: ^1.1.0
+  # 网络状态有关
+  connectivity: ^0.4.3
+  # 设备信息
+  device_info: ^0.4.0
+  # 从Android和iOS图像库中选择图像，并使用相机拍摄新照片
+  image_picker: ^0.6.0
+  flutter_multiple_image_picker: ^0.0.1
+  # 用于在Android和iOS上获取有关和控制相机的信息。支持预览相机馈送和捕捉图像
+  camera: ^0.5.2
+  # 从地址簿中选择联系人，并将联系人信息返回给应用程序，并且不需要用户的任何特殊权限。目前该插件仅支持选择电话号码
+  contact_picker: ^0.0.2
+
 
 dev_dependencies:
   flutter_test:

@@ -1,9 +1,34 @@
 // 微信页
-import 'package:flutter/material.dart';
-// import 'package:device_info/device_info.dart';
+import 'dart:io';
 
-class Wechat extends StatelessWidget {
+import 'package:flutter/material.dart';
+import 'package:yangyue/components/toast.dart';
+import 'package:device_info/device_info.dart';
+import 'package:image_picker/image_picker.dart';
+
+class Wechat extends StatefulWidget {
   Wechat({Key key}) : super(key: key);
+
+  @override
+  _WechatState createState() => _WechatState();
+}
+
+class _WechatState extends State<Wechat> {
+  List<File> _photoList = [];
+  List<File> _imageList = [];
+
+  _renderImageList(imageList) {
+    if (imageList == null) return null;
+    List<Widget> list = [];
+    imageList.forEach((_image) {
+      list.add(Image.file(_image));
+    });
+    return ListView(
+      scrollDirection: Axis.horizontal,
+      shrinkWrap: true,
+      children: list
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,11 +38,8 @@ class Wechat extends StatelessWidget {
         centerTitle: true
       ),
       body: new Container(
-        padding: EdgeInsets.only(top: 50.0),
         color: Colors.orange,
-        alignment: Alignment.center,
-        child: new Column(
-          // mainAxisAlignment: MainAxisAlignment.center,
+        child: ListView(
           children: <Widget>[
             Text(
               '微信页，用于测试调用系统功能',
@@ -27,7 +49,74 @@ class Wechat extends StatelessWidget {
                 height: 3.0
               )
             ),
-            Text('微信页，用于测试调用系统功能'),
+            // 设备信息
+            Container(
+              margin: EdgeInsets.only(top: 20.0),
+              child: FlatButton(
+                padding: EdgeInsets.symmetric(vertical: 10.0),
+                color: Colors.blueGrey,
+                highlightColor: Colors.blue[700],
+                colorBrightness: Brightness.dark,
+                splashColor: Colors.grey,
+                shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+                child: Text('获取手机信息'),
+                onPressed: () async {
+                  DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+                  AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+                  Message.success(context, androidInfo.model);
+                },
+              ),
+            ),
+            // 拍照
+            Container(
+              margin: EdgeInsets.only(top: 20.0),
+              child: FlatButton(
+                padding: EdgeInsets.symmetric(vertical: 10.0),
+                color: Colors.blueGrey,
+                highlightColor: Colors.blue[700],
+                colorBrightness: Brightness.dark,
+                splashColor: Colors.grey,
+                shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+                child: Text('拍个丑照'),
+                onPressed: () async {
+                    var image = await ImagePicker.pickImage(source: ImageSource.camera);
+                    if (image != null) {setState(() {
+                      _photoList.add(image);
+                    });
+                  }
+                },
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 10.0),
+              height: _photoList.length == 0 ? 0 : 160.0,
+              child: _renderImageList(_photoList)
+            ),
+            // 相册
+            Container(
+              margin: EdgeInsets.only(top: 20.0),
+              child: FlatButton(
+                padding: EdgeInsets.symmetric(vertical: 10.0),
+                color: Colors.blueGrey,
+                highlightColor: Colors.blue[700],
+                colorBrightness: Brightness.dark,
+                splashColor: Colors.grey,
+                shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+                child: Text('看看照片呢'),
+                onPressed: () async {
+                  var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+                  if (image != null) {setState(() {
+                    _imageList.add(image);
+                  });
+                  }
+                },
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 10.0),
+              height: _imageList.length == 0 ? 0 : 160.0,
+              child: _renderImageList(_imageList)
+            ),
           ],
         ),
       )

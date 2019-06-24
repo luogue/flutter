@@ -21,7 +21,12 @@ class _WechatState extends State<Wechat> {
     if (imageList == null) return null;
     List<Widget> list = [];
     imageList.forEach((_image) {
-      list.add(Image.file(_image));
+      list.add(
+        Padding(
+          padding: EdgeInsets.only(right: 16.0),
+          child: Image.file(_image, fit: BoxFit.cover)
+        )
+      );
     });
     return ListView(
       scrollDirection: Axis.horizontal,
@@ -40,6 +45,7 @@ class _WechatState extends State<Wechat> {
       body: new Container(
         color: Colors.orange,
         child: ListView(
+          padding: EdgeInsets.symmetric(horizontal: 20.0),
           children: <Widget>[
             Text(
               '微信页，用于测试调用系统功能',
@@ -52,6 +58,7 @@ class _WechatState extends State<Wechat> {
             // 设备信息
             Container(
               margin: EdgeInsets.only(top: 20.0),
+              padding: EdgeInsets.symmetric(horizontal: 120.0),
               child: FlatButton(
                 padding: EdgeInsets.symmetric(vertical: 10.0),
                 color: Colors.blueGrey,
@@ -69,7 +76,8 @@ class _WechatState extends State<Wechat> {
             ),
             // 拍照
             Container(
-              margin: EdgeInsets.only(top: 20.0),
+              margin: EdgeInsets.only(top: 30.0),
+              padding: EdgeInsets.symmetric(horizontal: 120.0),
               child: FlatButton(
                 padding: EdgeInsets.symmetric(vertical: 10.0),
                 color: Colors.blueGrey,
@@ -95,6 +103,7 @@ class _WechatState extends State<Wechat> {
             // 相册
             Container(
               margin: EdgeInsets.only(top: 20.0),
+              padding: EdgeInsets.symmetric(horizontal: 120.0),
               child: FlatButton(
                 padding: EdgeInsets.symmetric(vertical: 10.0),
                 color: Colors.blueGrey,

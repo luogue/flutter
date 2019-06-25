@@ -16,5 +16,5 @@ Map<String, WidgetBuilder> routes = {
   'performance': (context) => Performance(),
   'mine': (context) => Mine(),
   'wechat': (context) => Wechat(),
-  'webview': (context) => WebView(),
+  'webview': (context) => WebViewPage(),
 };

@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:yangyue/components/toast.dart';
 
@@ -14,7 +15,7 @@ get(context, url) async {
     Message.success(context, '数据请求成功');
     return res.data['data'];
   } else {
-    Message.success(context, res.statusMessage);
+    Message.error(context, res.statusMessage);
   }
 }
 
@@ -24,6 +25,6 @@ post(context, url, data) async {
     Message.success(context, '数据请求成功');
     return res.data['data'];
   } else {
-    Message.success(context, res.statusMessage);
+    Message.error(context, res.statusMessage);
   }
 }

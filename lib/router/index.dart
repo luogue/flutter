@@ -7,6 +7,7 @@ import 'package:yangyue/pages/tpp/performance/performance.dart';
 import 'package:yangyue/pages/tpp/mine/mine.dart';
 // 微信
 import 'package:yangyue/pages/wechat/wechat.dart';
+import 'package:yangyue/pages/wechat/webview.dart';
 
 Map<String, WidgetBuilder> routes = {
   'home': (context) => Home(),
@@ -15,4 +16,5 @@ Map<String, WidgetBuilder> routes = {
   'performance': (context) => Performance(),
   'mine': (context) => Mine(),
   'wechat': (context) => Wechat(),
+  'webview': (context) => WebView(),
 };

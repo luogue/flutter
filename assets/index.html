@@ -7,11 +7,43 @@
 <script src="https://cdn.bootcss.com/vConsole/3.3.0/vconsole.min.js"></script>
 </head>
 <body>
-<div>webview网页</div>
+  <div>webview网页</div>
+  <ul>
+    <li>1</li>
+    <li>2</li>
+    <li>3</li>
+  </ul>
+  <a href="https://baidu.com">11111111111</a>
+  <div class="drawer"></div>
+  <div class="drawer"></div>
+  <div class="drawer"></div>
+  <div class="drawer"></div>
+  <div class="drawer"></div>
+  <div class="drawer"></div>
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+}
+.drawer {
+  margin: 10px auto;
+  width: 200px;
+  height: 200px;
+  background: red;
+
+}
+</style>
 <script>
 // 初始化
 var vConsole = new VConsole();
-console.log('Hello world');
+window.onmousedown = function () {
+  console.log(sessionStorage);
+  // if (typeof window.localStorage !== 'undefined') {
+  //   alert('哈哈');
+  // } else {
+  //   alert('呵呵');
+  // }
+}
 </script>
 </body>
 </html>

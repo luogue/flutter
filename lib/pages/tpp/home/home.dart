@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:yangyue/api/api.dart';
 import 'package:yangyue/config/network.dart';
 import 'package:yangyue/components/toast.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
 
 class Home extends StatefulWidget {
   Home({Key key}) : super(key: key);
@@ -100,271 +101,326 @@ class _HomeState extends State<Home> {
     Navigator.popAndPushNamed(context, routeName);
   }
 
-  // 获取fixed容器
-  // getFixed() {
-  //   OverlayEntry _overlayEntry;
-  //   OverlayState overlayState = Overlay.of(context);
-  //   if (_overlayEntry == null) {
-  //     _overlayEntry = OverlayEntry(
-  //       builder: (BuildContext context) => Positioned(
-  //         //top值，可以改变这个值来改变toast在屏幕中的位置
-  //         top: 10.0,
-  //         child: Container(
-  //             alignment: Alignment.center,
-  //             width: 100.0,
-  //             child: Padding(
-  //               padding: EdgeInsets.symmetric(horizontal: 40.0),
-  //               child: AnimatedOpacity(
-  //                 opacity: 1.0,
-  //                 child: Center(
-  //                   child: Card(
-  //                     color: Colors.white,
-  //                     child: Padding(
-  //                       padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
-  //                       child: Text('hellooooooooooooooooo'),
-  //                     ),
-  //                   ),
-  //                 )
-  //               ),
-  //             )),
-  //       )
-  //     );
-  //     overlayState.insert(_overlayEntry);
-  //   } else {
-  //     _overlayEntry.markNeedsBuild();
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       body: Container(
         color: Color(0xFFEEEEEE),
-        child: ListView(
-          padding: EdgeInsets.all(0),
+        child: Stack(
+          fit: StackFit.expand,
+          overflow: Overflow.visible,
           children: <Widget>[
-            /* header 组件
-             * 设计思路：
-             * 1、在顶部时显示地区和扫码图标
-             * 2、下滑展示搜索
-             * 3、切换时需要淡入淡出，需要滚动进入
-             *
-             * 布局思考：
-             * 1、顶部和下滑时都在同一个水平容器中
-             * 2、利用z-index进行布局，让透明时容器层级低于body，不透明时高于body
-             * 这样才能在顶部透明时点击到轮播图
-             * 
-             * 动画交互：
-             * 1、根据滚动距离和容器高度计算百分比，作为透明度
-             * 2、半透明薄膜在容器和元素之间
-             * 
-             **/
-            // getFixed(),
+            // 头部
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                padding: EdgeInsets.fromLTRB(20.0, 30.0, 20.0, 0),
+                color: Colors.purple,
+                width: 100.0,
+                height: 70.0,
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    Container(
+                      child: Flex(
+                        direction: Axis.horizontal,
+                        children: <Widget>[
+                          Expanded(
+                            flex: 1,
+                            child: Text('成都', style: TextStyle(color: Colors.white))
+                          ),
+                          Expanded(
+                            flex: 0,
+                            child: Row(
+                              // mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                GestureDetector(
+                                  child: Container(
+                                    margin: EdgeInsets.only(right: 10.0),
+                                    child: Icon(
+                                      Icons.all_out,
+                                      color: Colors.white,
+                                      size: 23.0
+                                    )
+                                  ),
+                                  onTap: () => Message.success(context, '扫描二维码')
+                                ),
+                                GestureDetector(
+                                  child: Container(
+                                    margin: EdgeInsets.only(right: 10.0),
+                                    child: Icon(
+                                      Icons.date_range,
+                                      color: Colors.white,
+                                      size: 23.0
+                                    )
+                                  ),
+                                  onTap: () => Message.success(context, '日签')
+                                ),
+                                GestureDetector(
+                                  child: Container(
+                                    margin: EdgeInsets.only(right: 10.0),
+                                    child: Icon(
+                                      Icons.search,
+                                      color: Colors.white,
+                                      size: 23.0
+                                    )
+                                  ),
+                                  onTap: () => Message.success(context, '搜索')
+                                )
+                              ]
+                            )
+                          ),
+                        ]
+                      )
+                    )
+                  ]
+                )
+              ),
+            ),
+            // 内容
             Container(
-              padding: EdgeInsets.fromLTRB(20.0, 30.0, 20.0, 0),
-              color: Colors.purple,
-              width: 100.0,
-              height: 70.0,
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
+              margin: EdgeInsets.only(top: 70.0),
+              child: ListView(
+                padding: EdgeInsets.all(0),
                 children: <Widget>[
+                  /* header 组件
+                  * 设计思路：
+                  * 1、在顶部时显示地区和扫码图标
+                  * 2、下滑展示搜索
+                  * 3、切换时需要淡入淡出，需要滚动进入
+                  *
+                  * 布局思考：
+                  * 1、顶部和下滑时都在同一个水平容器中
+                  * 2、利用z-index进行布局，让透明时容器层级低于body，不透明时高于body
+                  * 这样才能在顶部透明时点击到轮播图
+                  * 
+                  * 动画交互：
+                  * 1、根据滚动距离和容器高度计算百分比，作为透明度
+                  * 2、半透明薄膜在容器和元素之间
+                  * 
+                  **/
+                  // Container(
+                  //   padding: EdgeInsets.fromLTRB(20.0, 30.0, 20.0, 0),
+                  //   color: Colors.purple,
+                  //   width: 100.0,
+                  //   height: 70.0,
+                  //   child: Column(
+                  //     mainAxisSize: MainAxisSize.max,
+                  //     children: <Widget>[
+                  //       Container(
+                  //         child: Flex(
+                  //           direction: Axis.horizontal,
+                  //           children: <Widget>[
+                  //             Expanded(
+                  //               flex: 1,
+                  //               child: Text('成都', style: TextStyle(color: Colors.white))
+                  //             ),
+                  //             Expanded(
+                  //               flex: 0,
+                  //               child: Row(
+                  //                 // mainAxisAlignment: MainAxisAlignment.center,
+                  //                 children: <Widget>[
+                  //                   GestureDetector(
+                  //                     child: Container(
+                  //                       margin: EdgeInsets.only(right: 10.0),
+                  //                       child: Icon(
+                  //                         Icons.all_out,
+                  //                         color: Colors.white,
+                  //                         size: 23.0
+                  //                       )
+                  //                     ),
+                  //                     onTap: () => Message.success(context, '扫描二维码')
+                  //                   ),
+                  //                   GestureDetector(
+                  //                     child: Container(
+                  //                       margin: EdgeInsets.only(right: 10.0),
+                  //                       child: Icon(
+                  //                         Icons.date_range,
+                  //                         color: Colors.white,
+                  //                         size: 23.0
+                  //                       )
+                  //                     ),
+                  //                     onTap: () => Message.success(context, '日签')
+                  //                   ),
+                  //                   GestureDetector(
+                  //                     child: Container(
+                  //                       margin: EdgeInsets.only(right: 10.0),
+                  //                       child: Icon(
+                  //                         Icons.search,
+                  //                         color: Colors.white,
+                  //                         size: 23.0
+                  //                       )
+                  //                     ),
+                  //                     onTap: () => Message.success(context, '搜索')
+                  //                   )
+                  //                 ]
+                  //               )
+                  //             ),
+                  //           ]
+                  //         )
+                  //       )
+                  //     ]
+                  //   )
+                  // ),
+                  // 轮播图
                   Container(
-                    child: Flex(
-                      // width: 1,
-                      direction: Axis.horizontal,
+                    height: 245.0,
+                    color: Colors.orange,
+                    child: Swiper(
+                      itemBuilder: (BuildContext context,int index){
+                        if (_advertisementList != null) {
+                          return GestureDetector(
+                            child: Image.network(_advertisementList['list'][index]['url'],fit: BoxFit.cover),
+                            onTap: () => Message.warning(context, '我还没开发呢，点J8啊点')
+                          );
+                        }
+                      },
+                      itemCount: _advertisementList != null ? _advertisementList['list'].length : 0,
+                      pagination: new SwiperPagination(),
+                    ),
+                  ),
+                  // 热映影片
+                  Container(
+                    padding: EdgeInsets.fromLTRB(10.0, 10.0, 0.0, 10.0),
+                    color: Colors.white,
+                    child: Column(
                       children: <Widget>[
-                        Expanded(
-                          flex: 1,
-                          child: Text('成都', style: TextStyle(color: Colors.white))
-                        ),
-                        Expanded(
-                          flex: 0,
-                          child: Row(
-                            // mainAxisAlignment: MainAxisAlignment.center,
+                        Container(
+                          margin: EdgeInsets.only(right: 18.0),
+                          child: Flex(
+                            direction: Axis.horizontal,
                             children: <Widget>[
-                              GestureDetector(
-                                child: Container(
-                                  margin: EdgeInsets.only(right: 10.0),
-                                  child: Icon(
-                                    Icons.all_out,
-                                    color: Colors.white,
-                                    size: 23.0
+                              Expanded(
+                                flex: 1,
+                                child: Text(
+                                  '热映影片',
+                                  style: TextStyle(
+                                    fontSize: 18.0
                                   )
                                 ),
-                                onTap: () => Message.success(context, '扫描二维码')
                               ),
-                              GestureDetector(
-                                child: Container(
-                                  margin: EdgeInsets.only(right: 10.0),
-                                  child: Icon(
-                                    Icons.date_range,
-                                    color: Colors.white,
-                                    size: 23.0
-                                  )
-                                ),
-                                onTap: () => Message.success(context, '日签')
-                              ),
-                              GestureDetector(
-                                child: Container(
-                                  margin: EdgeInsets.only(right: 10.0),
-                                  child: Icon(
-                                    Icons.search,
-                                    color: Colors.white,
-                                    size: 23.0
-                                  )
-                                ),
-                                onTap: () => Message.success(context, '搜索')
+                              Expanded(
+                                flex: 0,
+                                child: GestureDetector(
+                                  child: Row(children: <Widget>[
+                                    Text(
+                                      '全部${ _hot != null ? _hot['total'] : 0 }部  ',
+                                      style: TextStyle(
+                                        color: Color(0xFFA8A8A6)
+                                      )
+                                    ),
+                                    Icon(Icons.arrow_forward_ios, color: Color(0xFFA8A8A6), size: 12.0)
+                                  ]),
+                                  onTap: () => Message.success(context, '查看热映电影列表')
+                                )
                               )
                             ]
                           )
                         ),
+                        Container(
+                          margin: EdgeInsets.only(top: 18.0),
+                          height: 240.0,
+                          child: _renderHot(context, _hot)
+                        )
+                      ]
+                    )
+                  ),
+                  // 即将上映
+                  Container(
+                    margin: EdgeInsets.only(top: 10.0),
+                    padding: EdgeInsets.fromLTRB(10.0, 10.0, 0.0, 10.0),
+                    color: Colors.white,
+                    child: Column(children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.only(right: 18.0),
+                        child: Flex(
+                          direction: Axis.horizontal,
+                          children: <Widget>[
+                            Expanded(
+                              flex: 1,
+                              child: Text(
+                                '即将上映',
+                                style: TextStyle(
+                                  fontSize: 18.0
+                                )
+                              ),
+                            ),
+                            Expanded(
+                              flex: 0,
+                              child: GestureDetector(
+                                child: Row(children: <Widget>[
+                                  Text(
+                                    '全部  ',
+                                    style: TextStyle(
+                                      color: Color(0xFFA8A8A6)
+                                    )
+                                  ),
+                                  Icon(Icons.arrow_forward_ios, color: Color(0xFFA8A8A6), size: 12.0)
+                                ]),
+                                onTap: () => Message.success(context, '查看即将上映全部')
+                              )
+                            )
+                          ]
+                        )
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(top: 18.0),
+                        height: 240.0,
+                        child: _renderReach(context, _reach)
+                      )
+                    ])
+                  ),
+                  // 热门演出
+                  Container(
+                    margin: EdgeInsets.only(top: 10.0),
+                    padding: EdgeInsets.fromLTRB(10.0, 10.0, 0.0, 10.0),
+                    color: Colors.white,
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                          margin: EdgeInsets.only(right: 18.0),
+                          child: Flex(
+                            direction: Axis.horizontal,
+                            children: <Widget>[
+                              Expanded(
+                                flex: 1,
+                                child: Text(
+                                  '热门演出',
+                                  style: TextStyle(
+                                    fontSize: 18.0
+                                  )
+                                ),
+                              ),
+                              Expanded(
+                                flex: 0,
+                                child: GestureDetector(
+                                  child: Row(children: <Widget>[
+                                    Text(
+                                      '全部  ',
+                                      style: TextStyle(
+                                        color: Color(0xFFA8A8A6)
+                                      )
+                                    ),
+                                    Icon(Icons.arrow_forward_ios, color: Color(0xFFA8A8A6), size: 12.0)
+                                  ]),
+                                  onTap: () => Message.success(context, '查看即将开始的全部演出')
+                                )
+                              )
+                            ]
+                          )
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(top: 18.0),
+                          height: 240.0,
+                          child: _renderPerformance(context, _performance)
+                        )
                       ]
                     )
                   )
                 ]
               )
-            ),
-            // 轮播图
-            Container(
-              height: 245.0,
-              color: Colors.orange,
-              child: _renderAdvertisement(context, _advertisementList)
-            ),
-            // 热映影片
-            Container(
-              // margin: EdgeInsets.symmetric(vertical: 10.0),
-              // margin: EdgeInsets.only(top: 10.0),
-              padding: EdgeInsets.fromLTRB(10.0, 10.0, 0.0, 10.0),
-              color: Colors.white,
-              child: Column(children: <Widget>[
-                Container(
-                  margin: EdgeInsets.only(right: 18.0),
-                  child: Flex(
-                    direction: Axis.horizontal,
-                    children: <Widget>[
-                      Expanded(
-                        flex: 1,
-                        child: Text(
-                          '热映影片',
-                          style: TextStyle(
-                            fontSize: 18.0
-                          )
-                        ),
-                      ),
-                      Expanded(
-                        flex: 0,
-                        child: GestureDetector(
-                          child: Row(children: <Widget>[
-                            Text(
-                              '全部${ _hot != null ? _hot['total'] : 0 }部  ',
-                              style: TextStyle(
-                                color: Color(0xFFA8A8A6)
-                              )
-                            ),
-                            Icon(Icons.arrow_forward_ios, color: Color(0xFFA8A8A6), size: 12.0)
-                          ]),
-                          onTap: () => Message.success(context, '查看热映电影列表')
-                        )
-                      )
-                    ]
-                  )
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 18.0),
-                  height: 240.0,
-                  child: _renderHot(context, _hot)
-                )
-              ])
-            ),
-            // 即将上映
-            Container(
-              margin: EdgeInsets.only(top: 10.0),
-              padding: EdgeInsets.fromLTRB(10.0, 10.0, 0.0, 10.0),
-              color: Colors.white,
-              child: Column(children: <Widget>[
-                Container(
-                  margin: EdgeInsets.only(right: 18.0),
-                  child: Flex(
-                    direction: Axis.horizontal,
-                    children: <Widget>[
-                      Expanded(
-                        flex: 1,
-                        child: Text(
-                          '即将上映',
-                          style: TextStyle(
-                            fontSize: 18.0
-                          )
-                        ),
-                      ),
-                      Expanded(
-                        flex: 0,
-                        child: GestureDetector(
-                          child: Row(children: <Widget>[
-                            Text(
-                              '全部  ',
-                              style: TextStyle(
-                                color: Color(0xFFA8A8A6)
-                              )
-                            ),
-                            Icon(Icons.arrow_forward_ios, color: Color(0xFFA8A8A6), size: 12.0)
-                          ]),
-                          onTap: () => Message.success(context, '查看即将上映全部')
-                        )
-                      )
-                    ]
-                  )
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 18.0),
-                  height: 240.0,
-                  child: _renderReach(context, _reach)
-                )
-              ])
-            ),
-            // 热门演出
-            Container(
-              margin: EdgeInsets.only(top: 10.0),
-              padding: EdgeInsets.fromLTRB(10.0, 10.0, 0.0, 10.0),
-              color: Colors.white,
-              child: Column(children: <Widget>[
-                Container(
-                  margin: EdgeInsets.only(right: 18.0),
-                  child: Flex(
-                    direction: Axis.horizontal,
-                    children: <Widget>[
-                      Expanded(
-                        flex: 1,
-                        child: Text(
-                          '热门演出',
-                          style: TextStyle(
-                            fontSize: 18.0
-                          )
-                        ),
-                      ),
-                      Expanded(
-                        flex: 0,
-                        child: GestureDetector(
-                          child: Row(children: <Widget>[
-                            Text(
-                              '全部  ',
-                              style: TextStyle(
-                                color: Color(0xFFA8A8A6)
-                              )
-                            ),
-                            Icon(Icons.arrow_forward_ios, color: Color(0xFFA8A8A6), size: 12.0)
-                          ]),
-                          onTap: () => Message.success(context, '查看即将开始的全部演出')
-                        )
-                      )
-                    ]
-                  )
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 18.0),
-                  height: 240.0,
-                  child: _renderPerformance(context, _performance)
-                )
-              ])
             )
           ]
         )
@@ -387,27 +443,6 @@ class _HomeState extends State<Home> {
       ),
     );
   }
-}
-
-// 轮播图渲染函数
-_renderAdvertisement(context, data) {
-  if (data == null) return null;
-  List<Widget> list = [];
-  data['list'].forEach((item) {
-    list.add(GestureDetector(
-      child: Image(
-        // width: 394.0,
-        image: NetworkImage(item['url']),
-        fit: BoxFit.cover
-      ),
-      onTap: () => Message.warning(context, '我还没开发呢，点J8啊点')
-    ));
-  });
-  return ListView(
-    scrollDirection: Axis.horizontal,
-    shrinkWrap: true,
-    children: list
-  );
 }
 
 // 热映影片渲染函数

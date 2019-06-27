@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:yangyue/components/toast.dart';
 import 'package:device_info/device_info.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:contact_picker/contact_picker.dart';
+
 
 class Wechat extends StatefulWidget {
   Wechat({Key key}) : super(key: key);
@@ -15,6 +17,8 @@ class Wechat extends StatefulWidget {
 class _WechatState extends State<Wechat> {
   List<File> _photoList = [];
   List<File> _imageList = [];
+  final ContactPicker _contactPicker = new ContactPicker();
+  Contact _contact;
 
   _renderImageList(imageList) {
     if (imageList == null) return null;
@@ -96,7 +100,7 @@ class _WechatState extends State<Wechat> {
               ),
             ),
             Container(
-              margin: EdgeInsets.only(top: 10.0),
+              margin: EdgeInsets.only(top:  _imageList.length == 0 ? 0 : 10.0),
               height: _photoList.length == 0 ? 0 : 160.0,
               child: _renderImageList(_photoList)
             ),
@@ -123,7 +127,7 @@ class _WechatState extends State<Wechat> {
               ),
             ),
             Container(
-              margin: EdgeInsets.only(top: 10.0),
+              margin: EdgeInsets.only(top: _imageList.length == 0 ? 0 : 10.0),
               height: _imageList.length == 0 ? 0 : 160.0,
               child: _renderImageList(_imageList)
             ),
@@ -142,6 +146,35 @@ class _WechatState extends State<Wechat> {
                 onPressed: () {
                   Navigator.pushNamed(context, 'webview');
                 },
+              ),
+            ),
+            // 读取联系人
+            Container(
+              margin: EdgeInsets.only(top: 20.0),
+              padding: EdgeInsets.symmetric(horizontal: 120.0),
+              child: FlatButton(
+                padding: EdgeInsets.symmetric(vertical: 10.0),
+                color: Colors.blueGrey,
+                highlightColor: Colors.blue[700],
+                colorBrightness: Brightness.dark,
+                splashColor: Colors.grey,
+                shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+                child: Text('读取联系人'),
+                onPressed: () async {
+                  Contact contact = await _contactPicker.selectContact();
+                  Message.success(context, contact.toString());
+                  setState(() {
+                    _contact = contact;
+                  });
+                },
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: _contact == null ? 0 : 10.0),
+              alignment: Alignment.center,
+              // height: _imageList.length == 0 ? 0 : 160.0,
+              child: Text(
+                _contact == null ? '' : _contact.toString()
               ),
             ),
           ],

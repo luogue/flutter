@@ -162,7 +162,6 @@ class _WechatState extends State<Wechat> {
                 child: Text('读取联系人'),
                 onPressed: () async {
                   Contact contact = await _contactPicker.selectContact();
-                  Message.success(context, contact.toString());
                   setState(() {
                     _contact = contact;
                   });

@@ -108,80 +108,15 @@ class _HomeState extends State<Home> {
         color: Color(0xFFEEEEEE),
         child: Stack(
           fit: StackFit.expand,
-          overflow: Overflow.visible,
           children: <Widget>[
-            // 头部
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                padding: EdgeInsets.fromLTRB(20.0, 30.0, 20.0, 0),
-                color: Colors.purple,
-                width: 100.0,
-                height: 70.0,
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    Container(
-                      child: Flex(
-                        direction: Axis.horizontal,
-                        children: <Widget>[
-                          Expanded(
-                            flex: 1,
-                            child: Text('成都', style: TextStyle(color: Colors.white))
-                          ),
-                          Expanded(
-                            flex: 0,
-                            child: Row(
-                              // mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                GestureDetector(
-                                  child: Container(
-                                    margin: EdgeInsets.only(right: 10.0),
-                                    child: Icon(
-                                      Icons.all_out,
-                                      color: Colors.white,
-                                      size: 23.0
-                                    )
-                                  ),
-                                  onTap: () => Message.success(context, '扫描二维码')
-                                ),
-                                GestureDetector(
-                                  child: Container(
-                                    margin: EdgeInsets.only(right: 10.0),
-                                    child: Icon(
-                                      Icons.date_range,
-                                      color: Colors.white,
-                                      size: 23.0
-                                    )
-                                  ),
-                                  onTap: () => Message.success(context, '日签')
-                                ),
-                                GestureDetector(
-                                  child: Container(
-                                    margin: EdgeInsets.only(right: 10.0),
-                                    child: Icon(
-                                      Icons.search,
-                                      color: Colors.white,
-                                      size: 23.0
-                                    )
-                                  ),
-                                  onTap: () => Message.success(context, '搜索')
-                                )
-                              ]
-                            )
-                          ),
-                        ]
-                      )
-                    )
-                  ]
-                )
-              ),
-            ),
             // 内容
             Container(
-              margin: EdgeInsets.only(top: 70.0),
+              // margin: EdgeInsets.only(top: 70.0),
+            // Positioned(
+            //   top: 0,
+            //   bottom: 0,
+            //   left: 0,
+            //   right: 0,
               child: ListView(
                 padding: EdgeInsets.all(0),
                 children: <Widget>[
@@ -201,69 +136,6 @@ class _HomeState extends State<Home> {
                   * 2、半透明薄膜在容器和元素之间
                   * 
                   **/
-                  // Container(
-                  //   padding: EdgeInsets.fromLTRB(20.0, 30.0, 20.0, 0),
-                  //   color: Colors.purple,
-                  //   width: 100.0,
-                  //   height: 70.0,
-                  //   child: Column(
-                  //     mainAxisSize: MainAxisSize.max,
-                  //     children: <Widget>[
-                  //       Container(
-                  //         child: Flex(
-                  //           direction: Axis.horizontal,
-                  //           children: <Widget>[
-                  //             Expanded(
-                  //               flex: 1,
-                  //               child: Text('成都', style: TextStyle(color: Colors.white))
-                  //             ),
-                  //             Expanded(
-                  //               flex: 0,
-                  //               child: Row(
-                  //                 // mainAxisAlignment: MainAxisAlignment.center,
-                  //                 children: <Widget>[
-                  //                   GestureDetector(
-                  //                     child: Container(
-                  //                       margin: EdgeInsets.only(right: 10.0),
-                  //                       child: Icon(
-                  //                         Icons.all_out,
-                  //                         color: Colors.white,
-                  //                         size: 23.0
-                  //                       )
-                  //                     ),
-                  //                     onTap: () => Message.success(context, '扫描二维码')
-                  //                   ),
-                  //                   GestureDetector(
-                  //                     child: Container(
-                  //                       margin: EdgeInsets.only(right: 10.0),
-                  //                       child: Icon(
-                  //                         Icons.date_range,
-                  //                         color: Colors.white,
-                  //                         size: 23.0
-                  //                       )
-                  //                     ),
-                  //                     onTap: () => Message.success(context, '日签')
-                  //                   ),
-                  //                   GestureDetector(
-                  //                     child: Container(
-                  //                       margin: EdgeInsets.only(right: 10.0),
-                  //                       child: Icon(
-                  //                         Icons.search,
-                  //                         color: Colors.white,
-                  //                         size: 23.0
-                  //                       )
-                  //                     ),
-                  //                     onTap: () => Message.success(context, '搜索')
-                  //                   )
-                  //                 ]
-                  //               )
-                  //             ),
-                  //           ]
-                  //         )
-                  //       )
-                  //     ]
-                  //   )
-                  // ),
                   // 轮播图
                   Container(
                     height: 245.0,
@@ -277,8 +149,18 @@ class _HomeState extends State<Home> {
                           );
                         }
                       },
+                      autoplay: true,
                       itemCount: _advertisementList != null ? _advertisementList['list'].length : 0,
-                      pagination: new SwiperPagination(),
+                      pagination: SwiperPagination(
+                        alignment: Alignment.bottomCenter,
+                        builder: DotSwiperPaginationBuilder(
+                          size: 5.0,
+                          activeSize: 5.0,
+                          space: 2.0,
+                          color: Color(0xFF999999),
+                          activeColor: Color(0xFFEEEEEE),
+                        ),
+                      )
                     ),
                   ),
                   // 热映影片
@@ -415,6 +297,89 @@ class _HomeState extends State<Home> {
                           margin: EdgeInsets.only(top: 18.0),
                           height: 240.0,
                           child: _renderPerformance(context, _performance)
+                        )
+                      ]
+                    )
+                  )
+                ]
+              )
+            ),
+            // 头部
+            // 单个布局拼凑，这么做除了写的很方便以外，布局是一坨屎。。。
+            // Positioned(
+            //   top: 0,
+            //   left: 10.0,
+            //   width: 50.0,
+            //   height: 50.0,
+            //   child: Container(
+            //     color: Colors.red,
+            //     child: Text('hello')
+            //   )
+            // )
+            // 利用CSS的常用布局，容器没有高度，子元素占据各自的高度，完美
+            Positioned(
+              top: 40.0,
+              left: 10.0,
+              right: 10.0,
+              height: 100,
+              child: Stack(
+                children: <Widget>[
+                  Positioned(
+                    top: 0,
+                    left: 0,
+                    child: GestureDetector(
+                      child: Row(
+                        children: <Widget>[
+                          Text('成都', style: TextStyle(color: Colors.white)),
+                          Icon(
+                            Icons.arrow_drop_down,
+                            color: Colors.white,
+                            size: 23.0
+                          )
+                        ],
+                      ),
+                      onTap: () {
+                        Message.success(context, '选择城市列表');
+                      },
+                    )
+                  ),
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    child: Row(
+                      children: <Widget>[
+                        GestureDetector(
+                          child: Container(
+                            margin: EdgeInsets.only(right: 10.0),
+                            child: Icon(
+                              Icons.all_out,
+                              color: Colors.white,
+                              size: 23.0
+                            )
+                          ),
+                          onTap: () => Message.success(context, '扫描二维码')
+                        ),
+                        GestureDetector(
+                          child: Container(
+                            margin: EdgeInsets.only(right: 10.0),
+                            child: Icon(
+                              Icons.date_range,
+                              color: Colors.white,
+                              size: 23.0
+                            )
+                          ),
+                          onTap: () => Message.success(context, '日签')
+                        ),
+                        GestureDetector(
+                          child: Container(
+                            margin: EdgeInsets.only(right: 10.0),
+                            child: Icon(
+                              Icons.search,
+                              color: Colors.white,
+                              size: 23.0
+                            )
+                          ),
+                          onTap: () => Message.success(context, '搜索')
                         )
                       ]
                     )

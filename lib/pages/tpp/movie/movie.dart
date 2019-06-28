@@ -11,53 +11,16 @@ class Movie extends StatefulWidget {
 }
 
 class _MovieState extends State<Movie> {
-  Map _advertisementList;
-  Map _hot;
-  Map _reach;
-  Map _performance;
+  ScrollController _controller = new ScrollController();
   int _selectedIndex = 1;
 
   @override
   void initState() {
     super.initState();
-    //初始化状态
-    _getAdvertisementList(context);
-    _getHot(context);
-    _getReach(context);
-    _getPerformance(context);
-  }
-
-  // 获取广告列表
-  _getAdvertisementList(context) {
-    var res = get(context, api.getAdvertisementList);
-    res.then((data) {
-      setState(() { _advertisementList = data; });
-    })..catchError((e) { Message.error(context, '网络请求超时，因为easy-mock接口挂了，暂时没数据，等会儿再试~');});
-  }
-  // 热映影片
-  _getHot(context) {
-    var res = get(context, api.getHot);
-    res.then((data) {
-      setState(() { _hot = data; });
-    })..catchError((e) { Message.error(context, '网络请求超时，因为easy-mock接口挂了，暂时没数据，等会儿再试~');});
-  }
-  // // 即将上映
-  _getReach(context) {
-    var res = get(context, api.getReach);
-    res.then((data) {
-      setState(() {
-        _reach = data;
-      });
-    })..catchError((e) { Message.error(context, '网络请求超时，因为easy-mock接口挂了，暂时没数据，等会儿再试~');});
-  }
-  // 热门演出
-  _getPerformance(context) {
-    var res = get(context, api.getPerformance);
-    res.then((data) {
-      setState(() {
-        _performance = data;
-      });
-    })..catchError((e) { Message.error(context, '网络请求超时，因为easy-mock接口挂了，暂时没数据，等会儿再试~');});
+    //监听滚动事件，打印滚动位置
+    _controller.addListener(() {
+      print(_controller.offset); //打印滚动位置
+    });
   }
 
   // 点击tab
@@ -83,7 +46,15 @@ class _MovieState extends State<Movie> {
     }
     Navigator.popAndPushNamed(context, routeName);
   }
-
+  List<Widget> 
+  list = [
+    ListTile(title: Text('1')),
+    ListTile(title: Text('2')),
+    ListTile(title: Text('3')),
+    ListTile(title: Text('4')),
+    ListTile(title: Text('5')),
+    ListTile(title: Text('6')),
+  ];
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -91,155 +62,18 @@ class _MovieState extends State<Movie> {
         title: Text('电影'),
         centerTitle: true,
       ),
-      body: Container(
-        color: Color(0xFFEEEEEE),
-        child: ListView(
-          children: <Widget>[
-            // 轮播图
-            Container(
-              // padding: EdgeInsets.only(bottom: 30.0),
-              height: 245.0,
-              color: Colors.orange,
-              child: _renderAdvertisement(_advertisementList)
-            ),
-            // 热映影片
-            Container(
-              // margin: EdgeInsets.symmetric(vertical: 10.0),
-              // margin: EdgeInsets.only(top: 10.0),
-              padding: EdgeInsets.fromLTRB(10.0, 10.0, 0.0, 10.0),
-              color: Colors.white,
-              child: Column(children: <Widget>[
-                Container(
-                  margin: EdgeInsets.only(right: 18.0),
-                  child: Flex(
-                    direction: Axis.horizontal,
-                    children: <Widget>[
-                      Expanded(
-                        flex: 1,
-                        child: Text(
-                          '热映影片',
-                          style: TextStyle(
-                            fontSize: 18.0
-                          )
-                        ),
-                      ),
-                      Expanded(
-                        flex: 0,
-                        child: GestureDetector(
-                          child: Row(children: <Widget>[
-                            Text(
-                              '全部${ _hot != null ? _hot['total'] : 0 }部  ',
-                              style: TextStyle(
-                                color: Color(0xFFA8A8A6)
-                              )
-                            ),
-                            Icon(Icons.arrow_forward_ios, color: Color(0xFFA8A8A6), size: 12.0)
-                          ]),
-                          onTap: () => print('查看热映影片全部')
-                        )
-                      )
-                    ]
-                  )
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 18.0),
-                  height: 240.0,
-                  child: _renderHot(_hot)
-                )
-              ])
-            ),
-            // 即将上映
-            Container(
-              margin: EdgeInsets.only(top: 10.0),
-              padding: EdgeInsets.fromLTRB(10.0, 10.0, 0.0, 10.0),
-              color: Colors.white,
-              child: Column(children: <Widget>[
-                Container(
-                  margin: EdgeInsets.only(right: 18.0),
-                  child: Flex(
-                    direction: Axis.horizontal,
-                    children: <Widget>[
-                      Expanded(
-                        flex: 1,
-                        child: Text(
-                          '即将上映',
-                          style: TextStyle(
-                            fontSize: 18.0
-                          )
-                        ),
-                      ),
-                      Expanded(
-                        flex: 0,
-                        child: GestureDetector(
-                          child: Row(children: <Widget>[
-                            Text(
-                              '全部  ',
-                              style: TextStyle(
-                                color: Color(0xFFA8A8A6)
-                              )
-                            ),
-                            Icon(Icons.arrow_forward_ios, color: Color(0xFFA8A8A6), size: 12.0)
-                          ]),
-                          onTap: () => print('查看即将上映全部')
-                        )
-                      )
-                    ]
-                  )
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 18.0),
-                  height: 240.0,
-                  child: _renderReach(_reach)
-                )
-              ])
-            ),
-            // 热门演出
-            Container(
-              margin: EdgeInsets.only(top: 10.0),
-              padding: EdgeInsets.fromLTRB(10.0, 10.0, 0.0, 10.0),
-              color: Colors.white,
-              child: Column(children: <Widget>[
-                Container(
-                  margin: EdgeInsets.only(right: 18.0),
-                  child: Flex(
-                    direction: Axis.horizontal,
-                    children: <Widget>[
-                      Expanded(
-                        flex: 1,
-                        child: Text(
-                          '热门演出',
-                          style: TextStyle(
-                            fontSize: 18.0
-                          )
-                        ),
-                      ),
-                      Expanded(
-                        flex: 0,
-                        child: GestureDetector(
-                          child: Row(children: <Widget>[
-                            Text(
-                              '全部  ',
-                              style: TextStyle(
-                                color: Color(0xFFA8A8A6)
-                              )
-                            ),
-                            Icon(Icons.arrow_forward_ios, color: Color(0xFFA8A8A6), size: 12.0)
-                          ]),
-                          onTap: () => print('查看即将开始的全部演出')
-                        )
-                      )
-                    ]
-                  )
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 18.0),
-                  height: 240.0,
-                  child: _renderPerformance(_performance)
-                )
-              ])
-            )
-          ]
-        )
+      body: Scrollbar(
+        child: ListView.builder(
+            itemCount: 1,
+            // itemExtent: 5011.0, //列表项高度固定时，显式指定高度是一个好习惯(性能消耗小)
+            controller: _controller,
+            itemBuilder: (context, index) {
+              return Container(
+                height: 10000,
+                child: Text('1'),
+              );
+            }
+        ),
       ),
       // 底部导航
       bottomNavigationBar: BottomNavigationBar(

@@ -18,7 +18,9 @@ class _HomeState extends State<Home> {
   Map _performance;
   Map _recommend;
   int _selectedIndex = 0;
-  List<String> todos = ['hello', 'world'];
+  ScrollController _controller = new ScrollController();
+  // 滚动条到顶部的距离
+  double _distance = 0;
 
   @override
   void initState() {
@@ -29,6 +31,13 @@ class _HomeState extends State<Home> {
     _getReach(context);
     _getPerformance(context);
     _getRecommend(context);
+    //监听滚动事件，打印滚动位置
+    _controller.addListener(() {
+      print(_controller.offset);
+      // setState(() {
+      //   _distance = _controller.offset;
+      // });
+    });
   }
 
   // 获取广告列表
@@ -111,31 +120,11 @@ class _HomeState extends State<Home> {
           children: <Widget>[
             // 内容
             Container(
-              // margin: EdgeInsets.only(top: 70.0),
-            // Positioned(
-            //   top: 0,
-            //   bottom: 0,
-            //   left: 0,
-            //   right: 0,
+              height: 300.0,
               child: ListView(
                 padding: EdgeInsets.all(0),
+                controller: _controller,
                 children: <Widget>[
-                  /* header 组件
-                  * 设计思路：
-                  * 1、在顶部时显示地区和扫码图标
-                  * 2、下滑展示搜索
-                  * 3、切换时需要淡入淡出，需要滚动进入
-                  *
-                  * 布局思考：
-                  * 1、顶部和下滑时都在同一个水平容器中
-                  * 2、利用z-index进行布局，让透明时容器层级低于body，不透明时高于body
-                  * 这样才能在顶部透明时点击到轮播图
-                  * 
-                  * 动画交互：
-                  * 1、根据滚动距离和容器高度计算百分比，作为透明度
-                  * 2、半透明薄膜在容器和元素之间
-                  * 
-                  **/
                   // 轮播图
                   Container(
                     height: 245.0,

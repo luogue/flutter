@@ -3,6 +3,7 @@ import 'package:yangyue/api/api.dart';
 import 'package:yangyue/config/network.dart';
 import 'package:yangyue/components/toast.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:flutter/services.dart';
 
 class Home extends StatefulWidget {
   Home({Key key}) : super(key: key);
@@ -18,9 +19,11 @@ class _HomeState extends State<Home> {
   Map _performance;
   Map _recommend;
   int _selectedIndex = 0;
+  double _headerHeight = 80.0;
   ScrollController _controller = new ScrollController();
   // 滚动条到顶部的距离
   double _distance = 0;
+  bool _showHeader = false;
 
   @override
   void initState() {
@@ -31,12 +34,21 @@ class _HomeState extends State<Home> {
     _getReach(context);
     _getPerformance(context);
     _getRecommend(context);
+
     //监听滚动事件，打印滚动位置
     _controller.addListener(() {
-      print(_controller.offset);
-      // setState(() {
-      //   _distance = _controller.offset;
-      // });
+      if (_controller.offset <= _headerHeight) {
+        setState(() {
+          _distance = _controller.offset;
+          _showHeader = false;
+        });
+      }
+      if (_showHeader == false && _controller.offset > _headerHeight) {
+        setState(() {
+          _distance = 80;
+          _showHeader = true;
+        });
+      }
     });
   }
 
@@ -294,23 +306,21 @@ class _HomeState extends State<Home> {
               )
             ),
             // 头部
-            // 单个布局拼凑，这么做除了写的很方便以外，布局是一坨屎。。。
-            // Positioned(
-            //   top: 0,
-            //   left: 10.0,
-            //   width: 50.0,
-            //   height: 50.0,
-            //   child: Container(
-            //     color: Colors.red,
-            //     child: Text('hello')
-            //   )
-            // )
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              height: _distance,
+              child: Container(
+                color: Color.fromRGBO(255, 255, 255, _distance / _headerHeight)
+              )
+            ),
             // 利用CSS的常用布局，容器没有高度，子元素占据各自的高度，完美
             Positioned(
               top: 40.0,
               left: 10.0,
               right: 10.0,
-              height: 100,
+              height: 80,
               child: Stack(
                 children: <Widget>[
                   Positioned(
@@ -319,10 +329,10 @@ class _HomeState extends State<Home> {
                     child: GestureDetector(
                       child: Row(
                         children: <Widget>[
-                          Text('成都', style: TextStyle(color: Colors.white)),
+                          Text('成都', style: TextStyle(color: Color.fromRGBO(((1 - _distance / _headerHeight) * 255).toInt(), ((1 - _distance / _headerHeight) * 255).toInt(), ((1 - _distance / _headerHeight) * 255).toInt(), 1.0))),
                           Icon(
                             Icons.arrow_drop_down,
-                            color: Colors.white,
+                            color: Color.fromRGBO(((1 - _distance / _headerHeight) * 255).toInt(), ((1 - _distance / _headerHeight) * 255).toInt(), ((1 - _distance / _headerHeight) * 255).toInt(), 1.0),
                             size: 23.0
                           )
                         ],
@@ -332,6 +342,13 @@ class _HomeState extends State<Home> {
                       },
                     )
                   ),
+                  _showHeader
+                  ? Positioned(
+                    top: 0,
+                    right: 0,
+                    child: Text('1')
+                  )
+                  :
                   Positioned(
                     top: 0,
                     right: 0,
@@ -342,7 +359,7 @@ class _HomeState extends State<Home> {
                             margin: EdgeInsets.only(right: 10.0),
                             child: Icon(
                               Icons.all_out,
-                              color: Colors.white,
+                              color: Color.fromRGBO(255, 255, 255, 1 - _distance / _headerHeight),
                               size: 23.0
                             )
                           ),
@@ -353,7 +370,7 @@ class _HomeState extends State<Home> {
                             margin: EdgeInsets.only(right: 10.0),
                             child: Icon(
                               Icons.date_range,
-                              color: Colors.white,
+                              color: Color.fromRGBO(255, 255, 255, 1 - _distance / _headerHeight),
                               size: 23.0
                             )
                           ),
@@ -364,7 +381,7 @@ class _HomeState extends State<Home> {
                             margin: EdgeInsets.only(right: 10.0),
                             child: Icon(
                               Icons.search,
-                              color: Colors.white,
+                              color: Color.fromRGBO(255, 255, 255, 1 - _distance / _headerHeight),
                               size: 23.0
                             )
                           ),

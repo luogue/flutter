@@ -347,13 +347,14 @@ class _HomeState extends State<Home> {
                     )
                   ),
                   _showHeader
+                  // 搜索框
                   ? Positioned(
                     top: 0,
                     height: 32.0,
                     left: 60.0,
                     right: 10.0,
-                    // width: 200.0,
                     child: TextField(
+                      onTap: () { Message.error(context, 'aaa'); },
                       controller: TextEditingController(),
                       decoration: InputDecoration(
                         contentPadding: const EdgeInsets.symmetric(vertical: 0),
@@ -382,6 +383,7 @@ class _HomeState extends State<Home> {
                       cursorRadius: Radius.circular(10),
                     )
                   )
+                  // icon
                   : Positioned(
                     top: 0,
                     right: 0,

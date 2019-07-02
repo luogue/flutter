@@ -46,8 +46,7 @@ class _MovieState extends State<Movie> {
     }
     Navigator.popAndPushNamed(context, routeName);
   }
-  List<Widget> 
-  list = [
+  List<Widget> list = [
     ListTile(title: Text('1')),
     ListTile(title: Text('2')),
     ListTile(title: Text('3')),

@@ -10,18 +10,10 @@ void main() {
     // 以下两行 设置android状态栏为透明的沉浸。写在组件渲染之后，是为了在渲染后进行set赋值，覆盖状态栏，写在渲染之前MaterialApp组件会覆盖掉这个值。
     SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(statusBarColor: Colors.transparent);
     SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
-    // 没用呢
-    // ApplicationSwitcherDescription description = ApplicationSwitcherDescription(
-    //   label: 'flutter',
-    //   primaryColor: 0xFF000000
-    // );
-    // SystemChrome.setApplicationSwitcherDescription(description);
-    // 设置横竖屏
-    // List<DeviceOrientation> orientations = [
-    //   DeviceOrientation.landscapeLeft,
-    //   DeviceOrientation.landscapeRight
-    // ];
-    // SystemChrome.setPreferredOrientations(orientations);
+    // // 竖直方向
+    // SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(systemNavigationBarColor: Colors.orange));
+    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(systemNavigationBarIconBrightness: Brightness.dark));
   }
 }
 

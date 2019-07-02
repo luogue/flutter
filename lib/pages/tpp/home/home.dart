@@ -34,7 +34,11 @@ class _HomeState extends State<Home> {
     _getReach(context);
     _getPerformance(context);
     _getRecommend(context);
-
+    Message.success(context, '初始化状态栏');
+    // 隐藏顶部状态栏
+    // SystemChrome.setEnabledSystemUIOverlays([]);
+    // 恢复
+    // SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
     //监听滚动事件，打印滚动位置
     _controller.addListener(() {
       if (_controller.offset <= _headerHeight) {
@@ -318,13 +322,13 @@ class _HomeState extends State<Home> {
             // 利用CSS的常用布局，容器没有高度，子元素占据各自的高度，完美
             Positioned(
               top: 40.0,
-              left: 10.0,
-              right: 10.0,
-              height: 80,
+              left: 20.0,
+              right: 15.0,
+              height: 90,
               child: Stack(
                 children: <Widget>[
                   Positioned(
-                    top: 0,
+                    top: 5.0,
                     left: 0,
                     child: GestureDetector(
                       child: Row(
@@ -345,11 +349,40 @@ class _HomeState extends State<Home> {
                   _showHeader
                   ? Positioned(
                     top: 0,
-                    right: 0,
-                    child: Text('1')
+                    height: 32.0,
+                    left: 60.0,
+                    right: 10.0,
+                    // width: 200.0,
+                    child: TextField(
+                      controller: TextEditingController(),
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.symmetric(vertical: 0),
+                        // border: OutlineInputBorder(),
+                        // border: InputBorder.none,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide.none
+                        ),
+                        // labelText: '搜影院、影片、影人、演出、资讯、视频',
+                        hintText: '搜影院、影片、影人、演出、资讯、视频',
+                        isDense: true,
+                        prefixIcon: Icon(
+                          Icons.search,
+                          color: Color(0xFF999999),
+                          size: 20.0
+                        ),
+                        filled: true,
+                        fillColor: Color(0xFFEEEEEE),
+                      ),
+                      style: TextStyle(
+                        fontSize: 12.0,
+                      ),
+                      maxLengthEnforced: true,
+                      cursorColor: Colors.red,
+                      cursorRadius: Radius.circular(10),
+                    )
                   )
-                  :
-                  Positioned(
+                  : Positioned(
                     top: 0,
                     right: 0,
                     child: Row(
@@ -378,7 +411,6 @@ class _HomeState extends State<Home> {
                         ),
                         GestureDetector(
                           child: Container(
-                            margin: EdgeInsets.only(right: 10.0),
                             child: Icon(
                               Icons.search,
                               color: Color.fromRGBO(255, 255, 255, 1 - _distance / _headerHeight),

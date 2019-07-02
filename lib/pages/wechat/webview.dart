@@ -26,12 +26,6 @@ class _WebViewPageState extends State<WebViewPage> {
       future: _getFile(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          // return WebView(
-          //   initialUrl: new Uri.dataFromString(snapshot.data, mimeType: 'text/html', encoding: Encoding.getByName('utf-8')).toString(),
-          //   debuggingEnabled: true,
-          //   javascriptMode: JavascriptMode.unrestricted,
-          //   // javascriptChannels: JavascriptChannel,
-          // );
           return WebviewScaffold(
             appBar: AppBar(
               title: Text('flutter和web页面通信', style: TextStyle(color: Colors.white)),
@@ -39,8 +33,8 @@ class _WebViewPageState extends State<WebViewPage> {
             ),
             url: new Uri.dataFromString(snapshot.data, mimeType: 'text/html', encoding: Encoding.getByName('utf-8')).toString(),
             withJavascript: true,
-            // clearCache: true,
-            // clearCookies: true,
+            clearCache: true,
+            clearCookies: true,
             enableAppScheme: true,
             primary: true,
             withLocalStorage: true,
@@ -48,7 +42,7 @@ class _WebViewPageState extends State<WebViewPage> {
             scrollBar: true,
             supportMultipleWindows: true,
             appCacheEnabled: true,
-            // hidden: true,
+            hidden: true,
             allowFileURLs: true,
             resizeToAvoidBottomInset: true,
             geolocationEnabled: true,

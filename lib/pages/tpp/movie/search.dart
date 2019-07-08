@@ -12,7 +12,6 @@ class Search extends StatefulWidget {
 
 class _SearchState extends State<Search> {
   ScrollController _controller = new ScrollController();
-  int _selectedIndex = 1;
 
   @override
   void initState() {
@@ -26,22 +25,74 @@ class _SearchState extends State<Search> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: AppBar(
-        title: Text('电影'),
-        centerTitle: true,
-      ),
       body: Scrollbar(
-        child: ListView.builder(
-            itemCount: 1,
-            // itemExtent: 5011.0, //列表项高度固定时，显式指定高度是一个好习惯(性能消耗小)
-            controller: _controller,
-            itemBuilder: (context, index) {
-              return Container(
-                height: 10000,
-                child: Text('1'),
-              );
-            }
-        ),
+        child: Column(
+          children: <Widget>[
+            // 搜索框
+            Container(
+              padding: EdgeInsets.fromLTRB(16.0, 30.0, 0.0, 8.0),
+              // color: Colors.orange,
+              child: Flex(
+                direction: Axis.horizontal,
+                children: <Widget> [
+                  Expanded(
+                    flex: 1,
+                    child: Container(
+                      height: 32.0,
+                      child: TextField(
+                        controller: TextEditingController(),
+                        decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.symmetric(vertical: 0),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
+                            borderSide: BorderSide.none
+                          ),
+                          hintText: '搜影院、影片、影人、演出、资讯、视频',
+                          isDense: true,
+                          prefixIcon: Icon(
+                            Icons.search,
+                            color: Color(0xFF999999),
+                            size: 20.0
+                          ),
+                          filled: true,
+                          fillColor: Color(0xFFEEEEEE),
+                        ),
+                        style: TextStyle(
+                          fontSize: 12.0,
+                        ),
+                        maxLengthEnforced: true,
+                        cursorColor: Colors.red,
+                        cursorRadius: Radius.circular(10),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 0,
+                    child: GestureDetector(
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Text(
+                          '取消',
+                          style: TextStyle(
+                            color: Color(0xFF666666)
+                          ),
+                        ),
+                      ),
+                      onTap: () => Navigator.pop(context)
+                    )
+                  ),
+                ]
+              ),
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(color: Color(0xFFEEEEEE), width: 1),
+                  // color: Colors.red,
+                  // width: 10.0
+                )
+              ),
+            ),
+          ],
+        )
       ),
     );
   }

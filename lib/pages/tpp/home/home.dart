@@ -354,7 +354,7 @@ class _HomeState extends State<Home> {
                     left: 60.0,
                     right: 10.0,
                     child: TextField(
-                      onTap: () { Message.error(context, 'aaa'); },
+                      onTap: () => Navigator.pushNamed(context, 'search'),
                       controller: TextEditingController(),
                       decoration: InputDecoration(
                         contentPadding: const EdgeInsets.symmetric(vertical: 0),
@@ -419,7 +419,7 @@ class _HomeState extends State<Home> {
                               size: 23.0
                             )
                           ),
-                          onTap: () => Message.success(context, '搜索')
+                          onTap: () => Navigator.pushNamed(context, 'search')
                         )
                       ]
                     )

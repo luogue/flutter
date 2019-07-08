@@ -11,15 +11,11 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> {
-  ScrollController _controller = new ScrollController();
+  TextEditingController _textEditingController = new TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    //监听滚动事件，打印滚动位置
-    _controller.addListener(() {
-      print(_controller.offset); //打印滚动位置
-    });
   }
 
   @override
@@ -40,9 +36,10 @@ class _SearchState extends State<Search> {
                     child: Container(
                       height: 32.0,
                       child: TextField(
-                        controller: TextEditingController(),
+                        autofocus: true,
+                        controller: _textEditingController,
                         decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.symmetric(vertical: 0),
+                          contentPadding: const EdgeInsets.symmetric(vertical: 5.0),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(20),
                             borderSide: BorderSide.none
@@ -54,15 +51,38 @@ class _SearchState extends State<Search> {
                             color: Color(0xFF999999),
                             size: 20.0
                           ),
+                          // suffixIcon: Icon(
+                          //   Icons.cancel,
+                          //   color: Color(0xFF999999),
+                          //   size: 20.0
+                          // ),
+                          // suffixStyle: TextStyle(
+                          //   height: 2.0,
+                          // ),
+                          suffix: GestureDetector(
+                            child: Icon(
+                              Icons.cancel,
+                              color: Color(0xFF999999),
+                              size: 20.0
+                            ),
+                            onTap: () => Message.error(context, '取消'),
+                          ),
                           filled: true,
                           fillColor: Color(0xFFEEEEEE),
                         ),
                         style: TextStyle(
                           fontSize: 12.0,
+                          height: 1.6,
                         ),
+                        textInputAction: TextInputAction.search,
                         maxLengthEnforced: true,
                         cursorColor: Colors.red,
                         cursorRadius: Radius.circular(10),
+                        onSubmitted: (text) {
+                          Message.warning(context, text);
+                          _textEditingController.text = '月月最帅气';
+                          print(_textEditingController.text);
+                        },
                       ),
                     ),
                   ),
@@ -86,8 +106,6 @@ class _SearchState extends State<Search> {
               decoration: BoxDecoration(
                 border: Border(
                   bottom: BorderSide(color: Color(0xFFEEEEEE), width: 1),
-                  // color: Colors.red,
-                  // width: 10.0
                 )
               ),
             ),

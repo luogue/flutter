@@ -12,10 +12,23 @@ class Search extends StatefulWidget {
 
 class _SearchState extends State<Search> {
   TextEditingController _textEditingController = new TextEditingController();
+  String _searchText = '';
+  // 0为初始状态，清空搜索框时展示；1为搜索过渡状态；2为搜索结果页面
+  num _pageStatus = 0;
+  Map _searchResult;
 
   @override
   void initState() {
     super.initState();
+  }
+
+  // 获取搜索结果
+  _searchResource(context, String searchText) {
+    var res = post(context, api.searchResource, {'searchText': searchText});
+    res.then((data) {
+      setState(() { _searchResult = data; });
+    // }).catchError((e) { Message.error(context, e.toString()); });
+    }).catchError((e) { Message.error(context, '网络请求超时，因为easy-mock接口挂了，暂时没数据，等会儿再试~');});
   }
 
   @override
@@ -27,7 +40,11 @@ class _SearchState extends State<Search> {
             // 搜索框
             Container(
               padding: EdgeInsets.fromLTRB(16.0, 30.0, 0.0, 8.0),
-              // color: Colors.orange,
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(color: Color(0xFFEEEEEE), width: 1),
+                )
+              ),
               child: Flex(
                 direction: Axis.horizontal,
                 children: <Widget> [
@@ -37,7 +54,18 @@ class _SearchState extends State<Search> {
                       height: 32.0,
                       child: TextField(
                         autofocus: true,
-                        controller: _textEditingController,
+                        // controller: _textEditingController,
+                        controller: TextEditingController.fromValue(
+                          TextEditingValue(
+                            text: _searchText,
+                            selection: TextSelection.fromPosition(
+                              TextPosition(
+                                affinity: TextAffinity.downstream,
+                                offset: _searchText.length
+                              )
+                            )
+                          )
+                        ),
                         decoration: InputDecoration(
                           contentPadding: const EdgeInsets.symmetric(vertical: 5.0),
                           border: OutlineInputBorder(
@@ -51,21 +79,17 @@ class _SearchState extends State<Search> {
                             color: Color(0xFF999999),
                             size: 20.0
                           ),
-                          // suffixIcon: Icon(
-                          //   Icons.cancel,
-                          //   color: Color(0xFF999999),
-                          //   size: 20.0
-                          // ),
-                          // suffixStyle: TextStyle(
-                          //   height: 2.0,
-                          // ),
-                          suffix: GestureDetector(
+                          suffixIcon: _searchText == '' ? null : GestureDetector(
                             child: Icon(
                               Icons.cancel,
                               color: Color(0xFF999999),
                               size: 20.0
                             ),
-                            onTap: () => Message.error(context, '取消'),
+                            onTap: () {
+                              setState(() {
+                                _searchText = '';
+                              });
+                            }
                           ),
                           filled: true,
                           fillColor: Color(0xFFEEEEEE),
@@ -79,9 +103,12 @@ class _SearchState extends State<Search> {
                         cursorColor: Colors.red,
                         cursorRadius: Radius.circular(10),
                         onSubmitted: (text) {
-                          Message.warning(context, text);
-                          _textEditingController.text = '月月最帅气';
-                          print(_textEditingController.text);
+                          _searchResource(context, text);
+                        },
+                        onChanged: (text) {
+                          setState(() {
+                            _searchText = text;
+                          });
                         },
                       ),
                     ),
@@ -102,11 +129,6 @@ class _SearchState extends State<Search> {
                     )
                   ),
                 ]
-              ),
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(color: Color(0xFFEEEEEE), width: 1),
-                )
               ),
             ),
           ],

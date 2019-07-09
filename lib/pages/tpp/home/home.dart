@@ -58,7 +58,7 @@ class _HomeState extends State<Home> {
 
   // 获取广告列表
   _getAdvertisementList(context) {
-    var res = get(context, api.getAdvertisementList);
+    Future res = get(context, api.getAdvertisementList);
     res.then((data) {
       setState(() { _advertisementList = data; });
     // }).catchError((e) { Message.error(context, e.toString()); });
@@ -67,7 +67,7 @@ class _HomeState extends State<Home> {
 
   // 热映影片
   _getHot(context) {
-    var res = get(context, api.getHot);
+    Future res = get(context, api.getHot);
     res.then((data) {
       setState(() { _hot = data; });
     }).catchError((e) { Message.error(context, '网络请求超时，因为easy-mock接口挂了，暂时没数据，等会儿再试~');});
@@ -75,7 +75,7 @@ class _HomeState extends State<Home> {
 
   // 即将上映
   _getReach(context) {
-    var res = get(context, api.getReach);
+    Future res = get(context, api.getReach);
     res.then((data) {
       setState(() {
         _reach = data;
@@ -84,7 +84,7 @@ class _HomeState extends State<Home> {
   }
   // 热门演出
   _getPerformance(context) {
-    var res = get(context, api.getPerformance);
+    Future res = get(context, api.getPerformance);
     res.then((data) {
       setState(() {
         _performance = data;
@@ -94,7 +94,7 @@ class _HomeState extends State<Home> {
 
   // 热门演出
   _getRecommend(context) {
-    var res = get(context, api.getRecommend);
+    Future res = get(context, api.getRecommend);
     res.then((data) {
       setState(() {
         _recommend = data;

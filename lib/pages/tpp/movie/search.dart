@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:yangyue/api/api.dart';
 import 'package:yangyue/config/network.dart';
 import 'package:yangyue/components/toast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Search extends StatefulWidget {
   Search({Key key}) : super(key: key);
@@ -13,8 +14,9 @@ class Search extends StatefulWidget {
 class _SearchState extends State<Search> {
   String _searchText = '';
   // 0为初始搜索页，清空搜索框时展示；1为搜索过渡状态；2为搜索结果页面
-  num _pageStatus = 1;
+  num _pageStatus = 0;
   Map _searchResult;
+  List<String> a = [];
 
   @override
   void initState() {
@@ -23,39 +25,41 @@ class _SearchState extends State<Search> {
 
   // 获取搜索结果
   _searchResource(context, String searchText) {
-    var res = post(context, api.searchResource, {'searchText': searchText});
+    Future res = post(context, api.searchResource, {'searchText': searchText});
     res.then((data) {
       setState(() { _searchResult = data; });
-    // }).catchError((e) { Message.error(context, e.toString()); });
-    }).catchError((e) { Message.error(context, '网络请求超时，因为easy-mock接口挂了，暂时没数据，等会儿再试~');});
+    }).catchError((e) { Message.error(context, '网络请求超时，因为easy-mock接口挂了，等会儿再试~');});
   }
 
   // 通过页面状态计算3个不同的页面切换
-  _getPage() {
-    print(_pageStatus);
+  Widget _getCurrentWidget () {
     switch (_pageStatus) {
       case 0:
         return Container(
-
+          child: Text('1')
         );
       case 1:
         // 搜索过渡
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Image(
+              image: AssetImage("assets/images/loading.jpg"),
+              width: 50.0,
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 5.0),
+              child: Text('正在加载，么么哒~', style: TextStyle(color: Color(0xFF9591A7)))
+            )
+          ],
+        );
+      case 2:
         return Container(
-          color: Colors.yellow,
-          margin: EdgeInsets.only(top: 80.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image(
-                image: AssetImage("assets/images/loading.jpg"),
-                width: 50.0,
-              ),
-              Container(
-                margin: EdgeInsets.only(top: 5.0),
-                child: Text('正在加载，么么哒~', style: TextStyle(color: Color(0xFF9591A7)))
-              )
-            ],
-          ),
+          child: Text('1')
+        );
+      default:
+        return Container(
+          child: Text('未找到该状态')
         );
     }
   }
@@ -67,8 +71,11 @@ class _SearchState extends State<Search> {
         color: Colors.white,
         child: Stack(
           fit: StackFit.expand,
-          children: [
-            _getPage(),
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.only(top: 80.0),
+              child: _getCurrentWidget(),
+            ),
             // 搜索框
             Positioned(
               top: 0,
@@ -142,6 +149,9 @@ class _SearchState extends State<Search> {
                           cursorRadius: Radius.circular(10),
                           onSubmitted: (text) {
                             _searchResource(context, text);
+                            // setState(() {
+                            //   _pageStatus = 2;
+                            // });
                           },
                           onChanged: (text) {
                             setState(() {

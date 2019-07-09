@@ -20,7 +20,6 @@ get(context, url) async {
 }
 
 post(context, url, data) async {
-  print('请求=======================');
   Response res = await dio.post(url, data: data);
   if (res.statusCode == 200 && res.data['code'] == 0) {
     Message.success(context, '数据请求成功');

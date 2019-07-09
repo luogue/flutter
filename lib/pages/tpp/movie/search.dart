@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:ui';
 import 'package:yangyue/api/api.dart';
 import 'package:yangyue/config/network.dart';
 import 'package:yangyue/components/toast.dart';
@@ -15,28 +16,99 @@ class _SearchState extends State<Search> {
   String _searchText = '';
   // 0为初始搜索页，清空搜索框时展示；1为搜索过渡状态；2为搜索结果页面
   num _pageStatus = 0;
+  List<String> _hotSearch = [];
   Map _searchResult;
-  List<String> a = [];
+  List<String> _searchList = [];
+  SharedPreferences _localStorage;
 
   @override
   void initState() {
     super.initState();
+    _initStorage();
+    _getHotSearch(context);
   }
 
-  // 获取搜索结果
+  @override
+  void deactivate() {
+    super.deactivate();
+    _localStorage.setStringList('searchList', _searchList);
+  }
+
+  // 初始化持久化存储
+  Future<void> _initStorage() async {
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    print('初始化持久化存储=========================');
+    setState(() {
+      _localStorage = _prefs;
+      _searchList = _localStorage.getStringList('searchList');
+    });
+  }
+
+  // 获取热门搜索
+  _getHotSearch(context) {
+    Future res = get(context, api.hotSearch);
+    res.then((data) {
+      Message.success(context, '获取热门搜索');
+      setState(() {
+        _hotSearch = List<String>.from(data['list']);
+      });
+    }).catchError((e) {
+      Message.error(context, '网络请求超时，因为easy-mock接口挂了，等会儿再试~');
+    });
+  }
+
+  // 搜索
   _searchResource(context, String searchText) {
     Future res = post(context, api.searchResource, {'searchText': searchText});
     res.then((data) {
+      Message.success(context, '搜索资源成功');
       setState(() { _searchResult = data; });
-    }).catchError((e) { Message.error(context, '网络请求超时，因为easy-mock接口挂了，等会儿再试~');});
+    }).catchError((e) {
+      Message.error(context, '网络请求超时，因为easy-mock接口挂了，等会儿再试~');
+    });
   }
 
   // 通过页面状态计算3个不同的页面切换
   Widget _getCurrentWidget () {
     switch (_pageStatus) {
       case 0:
-        return Container(
-          child: Text('1')
+        return ListView(
+          children: <Widget>[
+            // 搜索历史
+            Container(
+              margin: EdgeInsets.only(bottom: 10.0),
+              padding: EdgeInsets.symmetric(horizontal: 15.0),
+              child: Flex(
+                direction: Axis.horizontal,
+                children: <Widget>[
+                  Expanded(
+                    flex: 1,
+                    child: Text('搜索记录', style: TextStyle(color: Color(0xFFA0A0A0)),),
+                  ),
+                  GestureDetector(
+                    onTap: () => Message.warning(context, '清空搜索历史'),
+                    child: Icon(
+                      Icons.delete,
+                      color: Color(0xFFA0A0A0),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Wrap(
+              children: _renderList(_searchList),
+            ),
+            // 热门搜索
+            Container(
+              margin: EdgeInsets.fromLTRB(0, 50.0, 0, 10.0),
+              padding: EdgeInsets.symmetric(horizontal: 15.0),
+              child: Text('热门搜索', style: TextStyle(color: Color(0xFFA0A0A0))),
+            ),
+            Wrap(
+              // children: _renderList(_hotSearch != null ? _hotSearch['list'] : []),
+              children: _renderList(_hotSearch),
+            )
+          ]
         );
       case 1:
         // 搜索过渡
@@ -55,13 +127,40 @@ class _SearchState extends State<Search> {
         );
       case 2:
         return Container(
-          child: Text('1')
+          child: Text('搜索结果页')
         );
       default:
         return Container(
           child: Text('未找到该状态')
         );
     }
+  }
+
+  // 渲染搜索历史
+  _renderList(List<String> list) {
+    if (list == null) return null;
+    List<Widget> _list = [];
+    list.forEach((item) {
+      _list.add(
+        GestureDetector(
+          onTap: () => print(_localStorage),
+          child: Container(
+            margin: EdgeInsets.fromLTRB(10.0, 0, 10.0, 10.0),
+            padding: EdgeInsets.fromLTRB(25.0, 10.0, 25.0, 10.0),
+            decoration: BoxDecoration(
+              color: Color(0xFFEEEEEE),
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+            child: Text(
+              item,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          )
+        )
+      );
+    });
+    return _list;
   }
 
   @override
@@ -99,7 +198,6 @@ class _SearchState extends State<Search> {
                         height: 32.0,
                         child: TextField(
                           autofocus: true,
-                          // controller: _textEditingController,
                           controller: TextEditingController.fromValue(
                             TextEditingValue(
                               text: _searchText,
@@ -148,10 +246,15 @@ class _SearchState extends State<Search> {
                           cursorColor: Colors.red,
                           cursorRadius: Radius.circular(10),
                           onSubmitted: (text) {
-                            _searchResource(context, text);
-                            // setState(() {
-                            //   _pageStatus = 2;
-                            // });
+                            // 非空才能搜索
+                            if (text != '') {
+                              // 搜索
+                              // _searchResource(context, text);
+                              setState(() {
+                                // _pageStatus = 2;
+                                _searchList.add(text);
+                              });
+                            }
                           },
                           onChanged: (text) {
                             setState(() {

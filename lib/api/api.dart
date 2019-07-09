@@ -5,6 +5,7 @@ class Api {
   final String getPerformance = '/performance';
   final String getRecommend = '/recommend';
   final String searchResource = '/searchResource';
+  final String hotSearch = '/hotSearch';
 }
 
 final api = new Api();

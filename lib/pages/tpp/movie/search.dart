@@ -61,7 +61,14 @@ class _SearchState extends State<Search> {
     Future res = post(context, api.searchResource, {'searchText': searchText});
     res.then((data) {
       Message.success(context, '搜索资源成功');
-      setState(() { _searchResult = data; });
+      // 显示搜索结果页
+      setState(() {
+        _pageStatus = 2;
+        _searchResult = data;
+        print('_searchResult==================================');
+        print('_searchResult==================================');
+        print(data);
+      });
     }).catchError((e) {
       Message.error(context, '网络请求超时，因为easy-mock接口挂了，等会儿再试~');
     });
@@ -71,12 +78,13 @@ class _SearchState extends State<Search> {
   _handleSearchText(String text) {
     // 非空才能搜索
     if (text != '') {
-      // 显示过渡状态
+      // 显示搜索过渡状态
       setState(() {
-        // _pageStatus = 1;
+        _searchText = text;
+        _pageStatus = 1;
       });
       // 搜索
-      // _searchResource(context, text);
+      _searchResource(context, text);
       if (_searchList.contains(text)) {
         // 把这个元素移动到最后面
         _searchList.remove(text);
@@ -93,9 +101,9 @@ class _SearchState extends State<Search> {
   Widget _getCurrentWidget () {
     switch (_pageStatus) {
       case 0:
+        // 搜索页
         return ListView(
           children: <Widget>[
-            // 搜索历史
             Container(
               margin: EdgeInsets.only(bottom: 10.0),
               padding: EdgeInsets.symmetric(horizontal: 15.0),
@@ -136,7 +144,7 @@ class _SearchState extends State<Search> {
           ]
         );
       case 1:
-        // 搜索过渡
+        // 搜索过渡页
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -151,8 +159,30 @@ class _SearchState extends State<Search> {
           ],
         );
       case 2:
+        // 搜索结果页
         return Container(
-          child: Text('搜索结果页')
+          color: Color(0xFFEEEEEE),
+          child: ListView(
+            padding: EdgeInsets.all(0),
+            children: <Widget>[
+              // 影人
+              Container(
+                // padding: EdgeInsets.only(left: 15.0),
+                padding: EdgeInsets.all(15.0),
+                child: Text('影人', style: TextStyle(color: Color(0xFFA0A0A0))),
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(color: Color(0xFFEEEEEE), width: 1),
+                  ),
+                  color: Colors.white
+                ),
+              ),
+              Column(
+                // padding: EdgeInsets.all(0),
+                children: _renderActors('actors')
+              )
+            ],
+          )
         );
       default:
         return Container(
@@ -189,6 +219,50 @@ class _SearchState extends State<Search> {
       );
     });
     return _list;
+  }
+
+  // 渲染演员列表
+  _renderActors(String type) {
+    if (_searchResult == null) return null;
+    // return [
+    //   Text('1')
+    // ];
+    return List<Map<String, dynamic>>.from(_searchResult[type]).map((actor) {
+      print(actor);
+      // return Text(actor['name']);
+      return Flex(
+        direction: Axis.horizontal,
+        children: <Widget>[
+          Container(
+            width: 100.0,
+            height: 120.0,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(5),
+              child: Image.network(
+                actor['image'],
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              // verticalDirection: VerticalDirection.up,
+              children: <Widget>[
+                Text(actor['name']),
+                Text(actor['nickName']),
+                Text(
+                  actor['works'].fold('作品', (preValue, work) {
+                    return preValue + work;
+                  }) + '等'
+                ),
+              ],
+            )
+          ),
+        ],
+      );
+    }).toList();
   }
 
   @override
@@ -259,6 +333,7 @@ class _SearchState extends State<Search> {
                               onTap: () {
                                 setState(() {
                                   _searchText = '';
+                                  _pageStatus = 0;
                                 });
                               }
                             ),
@@ -280,6 +355,12 @@ class _SearchState extends State<Search> {
                             setState(() {
                               _searchText = text;
                             });
+                            // 清空输入文本时显示搜索页
+                            if (text == '') {
+                              setState(() {
+                                _pageStatus = 0;
+                              });
+                            }
                           },
                         ),
                       ),

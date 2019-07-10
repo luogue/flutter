@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:yangyue/api/api.dart';
 import 'package:yangyue/config/network.dart';
 import 'package:yangyue/components/toast.dart';
+import 'package:yangyue/components/loading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Search extends StatefulWidget {
@@ -19,7 +20,7 @@ class _SearchState extends State<Search> {
   num _pageStatus = 0;
   List<String> _hotSearch = [];
   Map _searchResult;
-  List<String> _searchList = [];
+  List<String> _searchList;
   SharedPreferences _localStorage;
 
   @override
@@ -40,7 +41,7 @@ class _SearchState extends State<Search> {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     setState(() {
       _localStorage = _prefs;
-      _searchList = _prefs.getStringList('searchList');
+      _searchList = _prefs.getStringList('searchList') ?? [];
     });
   }
 
@@ -142,25 +143,13 @@ class _SearchState extends State<Search> {
         );
       case 1:
         // 搜索过渡页
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Image(
-              image: AssetImage("assets/images/loading.jpg"),
-              width: 50.0,
-            ),
-            Container(
-              margin: EdgeInsets.only(top: 5.0),
-              child: Text('正在加载，么么哒~', style: TextStyle(color: Color(0xFF9591A7)))
-            )
-          ],
-        );
+        return Loading();
       case 2:
         // 搜索结果页
         return Container(
           color: Color(0xFFEEEEEE),
           child: ListView(
-            padding: EdgeInsets.all(0),
+            padding: EdgeInsets.fromLTRB(0, 0, 0, 10.0),
             children: <Widget>[
               // 影人
               Container(
@@ -190,6 +179,20 @@ class _SearchState extends State<Search> {
               ),
               Column(
                 children: _renderActors('movies')
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 20.0),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  border: Border(
+                    top: BorderSide(color: Color(0xFFEEEEEE), width: 1),
+                  ),
+                  color: Colors.white
+                ),
+                child: GestureDetector(
+                  child: Text('查看全部20部影片', style: TextStyle(color: Color(0xFF4BA7EE))),
+                  onTap: () => Message.warning(context, '查看全部20部影片'),
+                )
               )
             ],
           )

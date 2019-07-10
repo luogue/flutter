@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-// import 'dart:ui';
 import 'package:yangyue/api/api.dart';
 import 'package:yangyue/config/network.dart';
 import 'package:yangyue/components/toast.dart';
@@ -35,7 +34,6 @@ class _HomeState extends State<Home> {
     _getReach(context);
     _getPerformance(context);
     _getRecommend(context);
-    Message.success(context, '初始化状态栏');
     // 隐藏顶部状态栏
     // SystemChrome.setEnabledSystemUIOverlays([]);
     // 恢复

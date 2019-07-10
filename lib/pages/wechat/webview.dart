@@ -5,7 +5,6 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 // import 'package:webview_flutter/webview_flutter.dart';
 
-
 class WebViewPage extends StatefulWidget {
   WebViewPage({Key key}) : super(key: key);
 
@@ -31,21 +30,16 @@ class _WebViewPageState extends State<WebViewPage> {
               title: Text('flutter和web页面通信', style: TextStyle(color: Colors.white)),
               centerTitle: true
             ),
-            url: new Uri.dataFromString(snapshot.data, mimeType: 'text/html', encoding: Encoding.getByName('utf-8')).toString(),
+            url: new Uri.dataFromString(
+              snapshot.data,
+              mimeType: 'text/html',
+              encoding: Encoding.getByName('utf-8')
+            ).toString(),
             withJavascript: true,
-            clearCache: true,
-            clearCookies: true,
-            enableAppScheme: true,
-            primary: true,
             withLocalStorage: true,
             withLocalUrl: true,
-            scrollBar: true,
-            supportMultipleWindows: true,
             appCacheEnabled: true,
-            hidden: true,
             allowFileURLs: true,
-            resizeToAvoidBottomInset: true,
-            geolocationEnabled: true,
             initialChild: Container(
               color: Colors.deepOrangeAccent,
               child: const Center(

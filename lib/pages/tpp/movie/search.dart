@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as prefix0;
 import 'dart:ui';
 import 'package:yangyue/api/api.dart';
 import 'package:yangyue/config/network.dart';
@@ -65,9 +66,6 @@ class _SearchState extends State<Search> {
       setState(() {
         _pageStatus = 2;
         _searchResult = data;
-        print('_searchResult==================================');
-        print('_searchResult==================================');
-        print(data);
       });
     }).catchError((e) {
       Message.error(context, '网络请求超时，因为easy-mock接口挂了，等会儿再试~');
@@ -167,7 +165,6 @@ class _SearchState extends State<Search> {
             children: <Widget>[
               // 影人
               Container(
-                // padding: EdgeInsets.only(left: 15.0),
                 padding: EdgeInsets.all(15.0),
                 child: Text('影人', style: TextStyle(color: Color(0xFFA0A0A0))),
                 decoration: BoxDecoration(
@@ -178,8 +175,22 @@ class _SearchState extends State<Search> {
                 ),
               ),
               Column(
-                // padding: EdgeInsets.all(0),
                 children: _renderActors('actors')
+              ),
+              // 电影
+              Container(
+                margin: EdgeInsets.only(top: 10.0),
+                padding: EdgeInsets.all(15.0),
+                child: Text('电影', style: TextStyle(color: Color(0xFFA0A0A0))),
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(color: Color(0xFFEEEEEE), width: 1),
+                  ),
+                  color: Colors.white
+                ),
+              ),
+              Column(
+                children: _renderActors('movies')
               )
             ],
           )
@@ -224,44 +235,55 @@ class _SearchState extends State<Search> {
   // 渲染演员列表
   _renderActors(String type) {
     if (_searchResult == null) return null;
-    // return [
-    //   Text('1')
-    // ];
     return List<Map<String, dynamic>>.from(_searchResult[type]).map((actor) {
-      print(actor);
-      // return Text(actor['name']);
-      return Flex(
-        direction: Axis.horizontal,
-        children: <Widget>[
-          Container(
-            width: 100.0,
-            height: 120.0,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(5),
-              child: Image.network(
-                actor['image'],
-                fit: BoxFit.cover,
+      var container = Container(
+        height: 150.0,
+        padding: EdgeInsets.all(20.0),
+        color: Colors.white,
+        child: Flex(
+          direction: Axis.horizontal,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              width: 100.0,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(5),
+                child: Image.network(
+                  actor['image'],
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-          ),
-          Expanded(
-            flex: 1,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              // verticalDirection: VerticalDirection.up,
-              children: <Widget>[
-                Text(actor['name']),
-                Text(actor['nickName']),
-                Text(
-                  actor['works'].fold('作品', (preValue, work) {
-                    return preValue + work;
-                  }) + '等'
-                ),
-              ],
-            )
-          ),
-        ],
+            Expanded(
+              flex: 1,
+              child: Container(
+                padding: EdgeInsets.fromLTRB(20.0, 0, 50.0, 0),
+                child:Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      actor['name'],
+                      style: TextStyle(
+                        color: Color(0xFFFF2221),
+                        fontSize: 16.0,
+                      )
+                    ),
+                    Text(actor['nickName'], style: TextStyle(color: Color(0xFF666666))),
+                    Text(
+                      actor['works'].fold('作品', (preValue, work) {
+                        return preValue + work;
+                      }) + '等',
+                      style: TextStyle(color: Color(0xFF999999))
+                    )
+                  ],
+                )
+              )
+            ),
+          ],
+        )
       );
+      return container;
     }).toList();
   }
 

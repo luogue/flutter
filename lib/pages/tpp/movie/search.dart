@@ -67,6 +67,28 @@ class _SearchState extends State<Search> {
     });
   }
 
+  // 处理搜索历史字符串操作
+  _handleSearchText(String text) {
+    // 非空才能搜索
+    if (text != '') {
+      // 搜索
+      setState(() {
+        // _pageStatus = 1;
+      });
+      // _searchResource(context, text);
+      if (_searchList.contains(text)) {
+        // 把这个元素移动到最后面
+        _searchList.remove(text);
+        _searchList.add(text);
+      } else {
+        setState(() {
+          // _pageStatus = 2;
+          _searchList.add(text);
+        });
+      }
+    }
+  }
+
   // 通过页面状态计算3个不同的页面切换
   Widget _getCurrentWidget () {
     switch (_pageStatus) {
@@ -135,16 +157,18 @@ class _SearchState extends State<Search> {
     }
   }
 
-  // 渲染搜索历史
+  // 渲染搜索资源名称
   _renderList(List<String> list) {
     if (list == null) return null;
     List<Widget> _list = [];
-    list.forEach((item) {
+    list.forEach((text) {
       _list.add(
+        // 搜索资源名称字符串
         GestureDetector(
-          // onTap: () => print(_localStorage),
           // onTap: () => _searchList.clear(),
-          onTap: () => print(_searchList.reversed.toList()),
+          onTap: () {
+            _handleSearchText(text);
+          },
           child: Container(
             margin: EdgeInsets.fromLTRB(10.0, 0, 10.0, 10.0),
             padding: EdgeInsets.fromLTRB(25.0, 10.0, 25.0, 10.0),
@@ -153,7 +177,7 @@ class _SearchState extends State<Search> {
               borderRadius: BorderRadius.circular(20.0),
             ),
             child: Text(
-              item,
+              text,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
@@ -247,24 +271,7 @@ class _SearchState extends State<Search> {
                           cursorColor: Colors.red,
                           cursorRadius: Radius.circular(10),
                           onSubmitted: (text) {
-                            // 非空才能搜索
-                            if (text != '') {
-                              // 搜索
-                              setState(() {
-                                // _pageStatus = 1;
-                              });
-                              // _searchResource(context, text);
-                              if (_searchList.contains(text)) {
-                                // 把这个元素移动到最后面
-                                _searchList.remove(text);
-                                _searchList.add(text);
-                              } else {
-                                setState(() {
-                                  // _pageStatus = 2;
-                                  _searchList.add(text);
-                                });
-                              }
-                            }
+                            _handleSearchText(text);
                           },
                           onChanged: (text) {
                             setState(() {

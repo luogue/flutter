@@ -71,10 +71,11 @@ class _SearchState extends State<Search> {
   _handleSearchText(String text) {
     // 非空才能搜索
     if (text != '') {
-      // 搜索
+      // 显示过渡状态
       setState(() {
         // _pageStatus = 1;
       });
+      // 搜索
       // _searchResource(context, text);
       if (_searchList.contains(text)) {
         // 把这个元素移动到最后面
@@ -82,7 +83,6 @@ class _SearchState extends State<Search> {
         _searchList.add(text);
       } else {
         setState(() {
-          // _pageStatus = 2;
           _searchList.add(text);
         });
       }
@@ -107,7 +107,11 @@ class _SearchState extends State<Search> {
                     child: Text('搜索记录', style: TextStyle(color: Color(0xFFA0A0A0)),),
                   ),
                   GestureDetector(
-                    onTap: () => Message.warning(context, '清空搜索历史'),
+                    onTap: () {
+                      setState(() {
+                        _searchList.clear();
+                      });
+                    },
                     child: Icon(
                       Icons.delete,
                       color: Color(0xFFA0A0A0),
@@ -165,7 +169,6 @@ class _SearchState extends State<Search> {
       _list.add(
         // 搜索资源名称字符串
         GestureDetector(
-          // onTap: () => _searchList.clear(),
           onTap: () {
             _handleSearchText(text);
           },

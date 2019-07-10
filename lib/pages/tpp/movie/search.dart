@@ -136,7 +136,6 @@ class _SearchState extends State<Search> {
               child: Text('热门搜索', style: TextStyle(color: Color(0xFFA0A0A0))),
             ),
             Wrap(
-              // children: _renderList(_hotSearch != null ? _hotSearch['list'] : []),
               children: _renderList(_hotSearch),
             )
           ]
@@ -235,7 +234,7 @@ class _SearchState extends State<Search> {
   // 渲染演员列表
   _renderActors(String type) {
     if (_searchResult == null) return null;
-    return List<Map<String, dynamic>>.from(_searchResult[type]).map((actor) {
+    return List<Map<String, dynamic>>.from(_searchResult[type]).map((item) {
       var container = Container(
         height: 150.0,
         padding: EdgeInsets.all(20.0),
@@ -249,7 +248,7 @@ class _SearchState extends State<Search> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(5),
                 child: Image.network(
-                  actor['image'],
+                  item['image'],
                   fit: BoxFit.cover,
                 ),
               ),
@@ -261,21 +260,72 @@ class _SearchState extends State<Search> {
                 child:Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
+                  children: type == 'actors'
+                  ? <Widget>[
                     Text(
-                      actor['name'],
+                      item['name'],
                       style: TextStyle(
                         color: Color(0xFFFF2221),
-                        fontSize: 16.0,
+                        fontSize: 18.0,
                       )
                     ),
-                    Text(actor['nickName'], style: TextStyle(color: Color(0xFF666666))),
+                    Text(item['nickName'], style: TextStyle(color: Color(0xFF666666))),
                     Text(
-                      actor['works'].fold('作品', (preValue, work) {
+                      item['works'].fold('作品', (preValue, work) {
                         return preValue + work;
                       }) + '等',
                       style: TextStyle(color: Color(0xFF999999))
                     )
+                  ]
+                  : <Widget>[
+                    Text(
+                      item['name'],
+                      style: TextStyle(
+                        fontSize: 18.0,
+                      )
+                    ),
+                    item['status'] == 2
+                    ? Row(
+                      children: <Widget>[
+                        Text(
+                          '${item['expects']}',
+                          style: TextStyle(
+                            color: Color(0xFFFEB46A),
+                            fontWeight: FontWeight.w700,
+                          )
+                        ),
+                        Text(' 人想看'),
+                      ],
+                    )
+                    : Row(
+                      children: <Widget>[
+                        Text('淘票票评分 '),
+                        Text(
+                          '${item['rate']}',
+                          style: TextStyle(
+                            color: Color(0xFFFEB46A),
+                            fontWeight: FontWeight.w700,
+                          )
+                        ),
+                      ],
+                    ),
+                    Text(
+                      item['actors'].fold('', (preValue, actor) {
+                        return preValue + actor + ' ';
+                      }),
+                      style: TextStyle(color: Color(0xFF999999))
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Text(
+                          item['countries'].fold('', (preValue, country) {
+                            return preValue + country + '  ';
+                          }),
+                          style: TextStyle(color: Color(0xFF999999))
+                        ),
+                        Text('${item['time']}', style: TextStyle(color: Color(0xFF999999))),
+                      ],
+                    ),
                   ],
                 )
               )

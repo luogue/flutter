@@ -37,10 +37,9 @@ class _SearchState extends State<Search> {
   // 初始化持久化存储
   Future<void> _initStorage() async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
-    print('初始化持久化存储=========================');
     setState(() {
       _localStorage = _prefs;
-      _searchList = _localStorage.getStringList('searchList');
+      _searchList = _prefs.getStringList('searchList');
     });
   }
 
@@ -96,7 +95,7 @@ class _SearchState extends State<Search> {
               ),
             ),
             Wrap(
-              children: _renderList(_searchList),
+              children: _renderList(_searchList.reversed.toList()),
             ),
             // 热门搜索
             Container(
@@ -143,7 +142,9 @@ class _SearchState extends State<Search> {
     list.forEach((item) {
       _list.add(
         GestureDetector(
-          onTap: () => print(_localStorage),
+          // onTap: () => print(_localStorage),
+          // onTap: () => _searchList.clear(),
+          onTap: () => print(_searchList.reversed.toList()),
           child: Container(
             margin: EdgeInsets.fromLTRB(10.0, 0, 10.0, 10.0),
             padding: EdgeInsets.fromLTRB(25.0, 10.0, 25.0, 10.0),
@@ -249,11 +250,20 @@ class _SearchState extends State<Search> {
                             // 非空才能搜索
                             if (text != '') {
                               // 搜索
-                              // _searchResource(context, text);
                               setState(() {
-                                // _pageStatus = 2;
-                                _searchList.add(text);
+                                // _pageStatus = 1;
                               });
+                              // _searchResource(context, text);
+                              if (_searchList.contains(text)) {
+                                // 把这个元素移动到最后面
+                                _searchList.remove(text);
+                                _searchList.add(text);
+                              } else {
+                                setState(() {
+                                  // _pageStatus = 2;
+                                  _searchList.add(text);
+                                });
+                              }
                             }
                           },
                           onChanged: (text) {

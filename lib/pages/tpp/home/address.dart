@@ -53,24 +53,117 @@ class _AddressState extends State<Address> {
   }
 
   // 搜索
-  _searchResource(context, String searchText) {
-    Future res = post(context, api.searchResource, {'searchText': searchText});
-    res.then((data) {
-      Message.success(context, '搜索资源成功');
-      // 显示搜索结果页
-      setState(() {
-        _searchResult = data;
-      });
-    }).catchError((e) {
-      Message.error(context, '网络请求超时，因为easy-mock接口挂了，等会儿再试~');
-    });
+  _searchResource(context, String text) {
+    // 手动筛选
   }
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      appBar: AppBar(
+        title: Text(
+          '选择城市',
+          style: TextStyle(
+            color: Color(0xFF333333),
+            fontSize: 16.0
+          )
+        ),
+        centerTitle: true,
+        backgroundColor: Color(0xFFF5F5F5),
+        // 自定义图标
+        leading: Builder(builder: (context) {
+          return Container(
+            alignment: Alignment.center,
+            child: GestureDetector(
+              child: Text(
+                '关闭',
+                style: TextStyle(
+                  color: Color(0xFF333333),
+                  fontSize: 16.0
+                )
+              ),
+              onTap: () => Navigator.pop(context),
+            ),
+          );
+        })
+      ),
       body: Container(
-        color: Colors.white,
+        color: Color(0xFFEEEEEE),
+        child: Stack(
+          children: <Widget>[
+            // 搜索框
+            Positioned(
+              child: Container(
+                height: 32.0,
+                child: TextField(
+                  controller: TextEditingController.fromValue(
+                    TextEditingValue(
+                      text: _searchText,
+                      selection: TextSelection.fromPosition(
+                        TextPosition(
+                          affinity: TextAffinity.downstream,
+                          offset: _searchText.length
+                        )
+                      )
+                    )
+                  ),
+                  decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.symmetric(vertical: 5.0),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                    ),
+                    hintText: '搜索城市名称',
+                    isDense: true,
+                    hintStyle: TextStyle(
+                      fontSize: 14.0,
+                      color: Color(0xFFAAAAAA)
+                    ),
+                    prefixIcon: Icon(
+                      Icons.search,
+                      color: Color(0xFF999999),
+                      size: 20.0
+                    ),
+                    suffixIcon: _searchText == '' ? null : GestureDetector(
+                      child: Icon(
+                        Icons.cancel,
+                        color: Color(0xFF999999),
+                        size: 20.0
+                      ),
+                      onTap: () {
+                        setState(() {
+                          _searchText = '';
+                        });
+                      }
+                    ),
+                    filled: true,
+                    fillColor: Color(0xFFFFFFFF),
+                  ),
+                  style: TextStyle(
+                    fontSize: 14.0,
+                    height: 1.2,
+                  ),
+                  textInputAction: TextInputAction.search,
+                  maxLengthEnforced: true,
+                  cursorColor: Colors.red,
+                  cursorRadius: Radius.circular(10),
+                  onSubmitted: (text) {
+                    _searchResource(context, text);
+                  },
+                  onChanged: (text) {
+                    setState(() {
+                      _searchText = text;
+                    });
+                    // 清空输入文本时显示搜索页
+                    if (text == '') {
+                      setState(() {
+                      });
+                    }
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

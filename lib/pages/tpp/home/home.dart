@@ -340,9 +340,7 @@ class _HomeState extends State<Home> {
                           )
                         ],
                       ),
-                      onTap: () {
-                        Message.success(context, '选择城市列表');
-                      },
+                      onTap: () => Navigator.pushNamed(context, 'address')
                     )
                   ),
                   _showHeader
@@ -418,7 +416,7 @@ class _HomeState extends State<Home> {
                               size: 23.0
                             )
                           ),
-                          onTap: () => Navigator.pushNamed(context, 'address'),
+                          onTap: () => Navigator.pushNamed(context, 'search')
                         )
                       ]
                     )

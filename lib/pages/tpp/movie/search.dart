@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart' as prefix0;
 import 'dart:ui';
 import 'package:yangyue/api/api.dart';
 import 'package:yangyue/config/network.dart';

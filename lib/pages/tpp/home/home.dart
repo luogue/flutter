@@ -418,7 +418,7 @@ class _HomeState extends State<Home> {
                               size: 23.0
                             )
                           ),
-                          onTap: () => Navigator.pushNamed(context, 'search')
+                          onTap: () => Navigator.pushNamed(context, 'address'),
                         )
                       ]
                     )

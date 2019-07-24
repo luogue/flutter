@@ -32,6 +32,7 @@ class _SearchState extends State<Search> {
   @override
   void deactivate() {
     super.deactivate();
+    print('搜索========================');
     _localStorage.setStringList('searchList', _searchList);
   }
 

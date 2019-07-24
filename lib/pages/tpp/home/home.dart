@@ -33,13 +33,8 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     //初始化状态
-    if (currentCity == null) {
-      setState(() {
-        currentCity = positionCity;
-      });
-    }
     _initStorage();
-    // _getAdvertisementList(context);
+    _getAdvertisementList(context);
     // _getHot(context);
     // _getReach(context);
     // _getPerformance(context);
@@ -66,9 +61,11 @@ class _HomeState extends State<Home> {
   }
 
   @override
-  void deactivate() {
-    super.deactivate();
-    _localStorage.setString('currentCity', currentCity);
+  void dispose() {
+    super.dispose();
+    print('你怎么会被调用呢？？？？？？==================================');
+    // print(currentCity);
+    if (currentCity != null) _localStorage.setString('currentCity', currentCity);
   }
 
   // 初始化持久化存储
@@ -76,18 +73,23 @@ class _HomeState extends State<Home> {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     setState(() {
       _localStorage = _prefs;
-      currentCity = _prefs.getString('currentCity') ?? positionCity;
+      _getParams();
     });
   }
 
   // 获取路有参数
   _getParams() {
     Map params = ModalRoute.of(context).settings.arguments;
-    if (params != null) {
-      setState(() {
+    print('params=========================================');
+    print(params);
+    print( _localStorage.getString('currentCity'));
+    setState(() {
+      if (params != null) {
         currentCity = params['currentCity'];
-      });
-    }
+      } else {
+        currentCity = _localStorage.getString('currentCity') ?? positionCity;
+      }
+    });
   }
 
   // 获取广告列表
@@ -164,7 +166,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    _getParams();
+    // _getParams();
     return new Scaffold(
       body: Container(
         color: Color(0xFFEEEEEE),
@@ -188,7 +190,7 @@ class _HomeState extends State<Home> {
                           return GestureDetector(
                             child: Image.network(_advertisementList['list'][index]['url'],fit: BoxFit.cover),
                             // onTap: () => Message.warning(context, '我还没开发呢，点J8啊点'),
-                            onTap: () => print(ModalRoute.of(context).settings),
+                            onTap: () => Message.warning(context, currentCity),
                           );
                         }
                       },
@@ -371,7 +373,7 @@ class _HomeState extends State<Home> {
                     child: GestureDetector(
                       child: Row(
                         children: <Widget>[
-                          Text(currentCity ?? '？？？？？？？？？', style: TextStyle(color: Color.fromRGBO(((1 - _distance / _headerHeight) * 255).toInt(), ((1 - _distance / _headerHeight) * 255).toInt(), ((1 - _distance / _headerHeight) * 255).toInt(), 1.0))),
+                          Text(currentCity ?? '暂无', style: TextStyle(color: Color.fromRGBO(((1 - _distance / _headerHeight) * 255).toInt(), ((1 - _distance / _headerHeight) * 255).toInt(), ((1 - _distance / _headerHeight) * 255).toInt(), 1.0))),
                           Icon(
                             Icons.arrow_drop_down,
                             color: Color.fromRGBO(((1 - _distance / _headerHeight) * 255).toInt(), ((1 - _distance / _headerHeight) * 255).toInt(), ((1 - _distance / _headerHeight) * 255).toInt(), 1.0),
@@ -380,7 +382,8 @@ class _HomeState extends State<Home> {
                         ],
                       ),
                       onTap: () => Navigator.pushNamed(context, 'address', arguments: {'currentCity': currentCity, 'positionCity': positionCity }),
-                    )
+                      // onTap: () => print(currentCity),
+                    ),
                   ),
                   _showHeader
                   // 搜索框

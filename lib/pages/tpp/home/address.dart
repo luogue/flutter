@@ -31,12 +31,6 @@ class _AddressState extends State<Address> {
     _getCityList(context);
   }
 
-  @override
-  void deactivate() {
-    super.deactivate();
-    // _localStorage.setStringList('searchList', _searchList);
-  }
-
   // 初始化持久化存储
   Future<void> _initStorage() async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();

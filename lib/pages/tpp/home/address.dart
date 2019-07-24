@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as prefix0;
+import 'dart:ui';
 import 'package:yangyue/api/api.dart';
 import 'package:yangyue/config/network.dart';
 import 'package:yangyue/components/toast.dart';
@@ -16,10 +18,15 @@ class _AddressState extends State<Address> {
   Map _address;
   Map _searchResult;
   SharedPreferences _localStorage;
+  MediaQueryData mediaQuery = MediaQueryData.fromWindow(window);
+  String currentCity;
+  String positionCity;
 
   @override
   void initState() {
     super.initState();
+    // print('初始化==========================');
+    // print(ModalRoute.of(context).settings.arguments);
     _initStorage();
     _getCityList(context);
   }
@@ -57,8 +64,121 @@ class _AddressState extends State<Address> {
     // 手动筛选
   }
 
+  // 渲染首字母城市列表
+  _renderCityList() {
+    if(_address == null) return <Widget>[];
+    List<Widget> list = [];
+    _address['cityList'].forEach((firstLetter, cityList) {
+      list.add(
+        // 首字母
+        Expanded(
+          flex: 0,
+        child: 
+        Container(
+          alignment: Alignment.bottomLeft,
+          height: 32.0,
+          margin: EdgeInsets.fromLTRB(10.0, 0, 0, 10.0),
+          child: Text(
+            firstLetter,
+            style: TextStyle(
+              fontSize: 14.0,
+              color: Colors.green,
+            )
+          ),
+        ),
+        ),
+      );
+    var a = List<Widget>.from(cityList.map((city) {
+        return Expanded(
+          flex: 0,
+          child: GestureDetector(
+            onTap: () {
+              // setState(() {
+              //   currentCity = city;
+              // });
+              Navigator.popAndPushNamed(context, 'home', arguments: { 'currentCity': city });
+            },
+            child: Container(
+              alignment: Alignment.centerLeft,
+              padding: EdgeInsets.only(left: 10.0),
+              height: 50.0,
+              constraints: BoxConstraints.tightForFinite(),
+              child: Text(
+                city,
+                style: TextStyle(
+                  color: currentCity == city ? Colors.white : Colors.black,
+                )
+              ),
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(color: Color(0xFFEEEEEE), width: 1),
+                ),
+                color: currentCity == city ? Colors.orange : Colors.white
+              ),
+            ),
+          ),
+        );
+    }));
+    list.addAll(a);
+      // list.add(
+      //   Expanded(
+      //     flex: 0,
+      //   child: 
+      //   Column(
+      //     mainAxisSize: MainAxisSize.min,
+      //     crossAxisAlignment: CrossAxisAlignment.end,
+      //     children: List<Widget>.from(cityList.map((city) {
+      //       return Container(
+      //         constraints: BoxConstraints.tightForFinite(),
+      //         child: Text(city),
+      //         decoration: BoxDecoration(
+      //           border: Border(
+      //             bottom: BorderSide(color: Color(0xFFEEEEEE), width: 1),
+      //           ),
+      //           color: Colors.white
+      //         ),
+      //       );
+      //     }).toList())
+      //   )
+      //   )
+      // );
+    });
+    return list;
+    print(_address['cityList'].keys());
+    // _address['cityList'].keys().map((prop) {
+    //   print(prop);
+    // });
+    _address['cityList'].keys().map((prop) {
+      return <Widget>[
+        // 首字母
+        Container(
+          margin: EdgeInsets.fromLTRB(0, 10.0, 0, 10.0),
+          child: Text(
+            prop,
+            style: TextStyle(
+              fontSize: 12.0,
+              color: Color(0xFF000000)
+            )
+          ),
+        ),
+      ];
+    }).toList();
+  }
+
+  // 获取路有参数
+  _getParams() {
+    print('===========================================;');
+    Map params = ModalRoute.of(context).settings.arguments;
+    print(params);
+    setState(() {
+      currentCity = params['currentCity'];
+      positionCity = params['positionCity'];
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    _getParams();
     return new Scaffold(
       appBar: AppBar(
         title: Text(
@@ -70,6 +190,7 @@ class _AddressState extends State<Address> {
         ),
         centerTitle: true,
         backgroundColor: Color(0xFFF5F5F5),
+        elevation: 0,
         // 自定义图标
         leading: Builder(builder: (context) {
           return Container(
@@ -88,9 +209,154 @@ class _AddressState extends State<Address> {
         })
       ),
       body: Container(
-        color: Color(0xFFEEEEEE),
+        color: Color(0xFFF5F5F5),
         child: Stack(
           children: <Widget>[
+            // 地址
+            ListView(
+              children: <Widget>[
+                // 当前城市
+                Container(
+                  margin: EdgeInsets.fromLTRB(10.0, 50.0, 0, 10.0),
+                  child: Text(
+                    '当前城市',
+                    style: TextStyle(
+                      fontSize: 12.0,
+                      color: Color(0xFF000000)
+                    )
+                  ),
+                ),
+                Wrap(
+                  children: <Widget>[
+                    GestureDetector(
+                      onTap: currentCity == null
+                        ? () => Message.warning(context, '必须先选择一个城市')
+                        : () => Navigator.popAndPushNamed(context, 'home', arguments: {'currentCity': currentCity}),
+                      child: Container(
+                        margin: EdgeInsets.all(5.0),
+                        width: mediaQuery.size.width / 3.5,
+                        height: 32.0,
+                        alignment: Alignment.center,
+                        constraints: BoxConstraints.tightFor(),
+                        decoration: BoxDecoration(
+                          border: Border(
+                            left: BorderSide(color: Color(0xFFFF576C), width: 1),
+                            top: BorderSide(color: Color(0xFFFF576C), width: 1),
+                            right: BorderSide(color: Color(0xFFFF576C), width: 1),
+                            bottom: BorderSide(color: Color(0xFFFF576C), width: 1),
+                          ),
+                          color: Colors.white,
+                        ),
+                        child: Text(
+                          currentCity ?? '暂无选择城市',
+                          style: TextStyle(
+                            fontSize: 14.0,
+                            color: Color(0xFFFF576C),
+                          )
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                // 定位城市
+                Container(
+                  margin: EdgeInsets.fromLTRB(10.0, 10.0, 0, 10.0),
+                  child: Text(
+                    '定位城市',
+                    style: TextStyle(
+                      fontSize: 12.0,
+                      color: Color(0xFF000000)
+                    )
+                  ),
+                ),
+                Wrap(
+                  children: <Widget>[
+                    GestureDetector(
+                      onTap: currentCity == null
+                        ? () => Message.warning(context, '必须先选择一个城市')
+                        : () => Navigator.popAndPushNamed(context, 'home', arguments: {'currentCity': currentCity}),
+                      child: Container(
+                        margin: EdgeInsets.all(10.0),
+                        width: mediaQuery.size.width / 3.5,
+                        height: 32.0,
+                        alignment: Alignment.center,
+                        constraints: BoxConstraints.tightFor(),
+                        decoration: BoxDecoration(
+                          border: currentCity == positionCity ? Border(
+                            left: BorderSide(color: Color(0xFFFF576C), width: 1),
+                            top: BorderSide(color: Color(0xFFFF576C), width: 1),
+                            right: BorderSide(color: Color(0xFFFF576C), width: 1),
+                            bottom: BorderSide(color: Color(0xFFFF576C), width: 1),
+                          ) : null,
+                          color: Colors.white,
+                        ),
+                        child: Text(
+                          positionCity ?? '暂无定位城市',
+                          style: TextStyle(
+                            fontSize: 14.0,
+                            color: currentCity == positionCity ? Color(0xFFFF576C) : Color(0xFF999999),
+                          )
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                // 城市数据
+                Container(
+                  margin: EdgeInsets.fromLTRB(10.0, 10.0, 0, 10.0),
+                  child: Text(
+                    '热门城市',
+                    style: TextStyle(
+                      fontSize: 12.0,
+                      color: Color(0xFF000000)
+                    )
+                  ),
+                ),
+                // 热门城市
+                Wrap(
+                  children: _address != null ? List<String>.from(_address['hotList']).map((city) {
+                  return GestureDetector(
+                    onTap: () {
+                      // setState(() {
+                      //   currentCity = city;
+                      // });
+                      Navigator.popAndPushNamed(context, 'home', arguments: { 'currentCity': city });
+                    },
+                    child: Container(
+                      margin: EdgeInsets.all(5.0),
+                      width: mediaQuery.size.width / 3.5,
+                      height: 32.0,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        border: currentCity == city ? Border(
+                          left: BorderSide(color: Color(0xFFFF576C), width: 1),
+                          top: BorderSide(color: Color(0xFFFF576C), width: 1),
+                          right: BorderSide(color: Color(0xFFFF576C), width: 1),
+                          bottom: BorderSide(color: Color(0xFFFF576C), width: 1),
+                        ) : null,
+                        color: Colors.white,
+                      ),
+                      child: Text(
+                        city,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 14.0,
+                          color: Color(0xFF999999),
+                        )
+                      ),
+                    ),
+                  );
+                }).toList()
+                : [],
+                ),
+                // 城市列表
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: _renderCityList()
+                ),
+              ],
+            ),
             // 搜索框
             Positioned(
               child: Container(

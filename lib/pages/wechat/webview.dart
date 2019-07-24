@@ -5,7 +5,6 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 // import 'package:webview_flutter/webview_flutter.dart';
 
-
 class WebViewPage extends StatefulWidget {
   WebViewPage({Key key}) : super(key: key);
 

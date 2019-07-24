@@ -4,6 +4,7 @@ import 'package:yangyue/config/network.dart';
 import 'package:yangyue/components/toast.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
   Home({Key key}) : super(key: key);
@@ -24,16 +25,25 @@ class _HomeState extends State<Home> {
   // 滚动条到顶部的距离
   double _distance = 0;
   bool _showHeader = false;
+  String currentCity;
+  String positionCity = '成都';
+  SharedPreferences _localStorage;
 
   @override
   void initState() {
     super.initState();
     //初始化状态
-    _getAdvertisementList(context);
-    _getHot(context);
-    _getReach(context);
-    _getPerformance(context);
-    _getRecommend(context);
+    if (currentCity == null) {
+      setState(() {
+        currentCity = positionCity;
+      });
+    }
+    _initStorage();
+    // _getAdvertisementList(context);
+    // _getHot(context);
+    // _getReach(context);
+    // _getPerformance(context);
+    // _getRecommend(context);
     // 隐藏顶部状态栏
     // SystemChrome.setEnabledSystemUIOverlays([]);
     // 恢复
@@ -55,11 +65,38 @@ class _HomeState extends State<Home> {
     });
   }
 
+  @override
+  void deactivate() {
+    super.deactivate();
+    _localStorage.setString('currentCity', currentCity);
+  }
+
+  // 初始化持久化存储
+  Future<void> _initStorage() async {
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _localStorage = _prefs;
+      currentCity = _prefs.getString('currentCity') ?? positionCity;
+    });
+  }
+
+  // 获取路有参数
+  _getParams() {
+    Map params = ModalRoute.of(context).settings.arguments;
+    if (params != null) {
+      setState(() {
+        currentCity = params['currentCity'];
+      });
+    }
+  }
+
   // 获取广告列表
   _getAdvertisementList(context) {
     Future res = get(context, api.getAdvertisementList);
     res.then((data) {
-      setState(() { _advertisementList = data; });
+      setState(() {
+        _advertisementList = data;
+      });
     // }).catchError((e) { Message.error(context, e.toString()); });
     }).catchError((e) { Message.error(context, '网络请求超时，因为easy-mock接口挂了，暂时没数据，等会儿再试~');});
   }
@@ -127,6 +164,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    _getParams();
     return new Scaffold(
       body: Container(
         color: Color(0xFFEEEEEE),
@@ -149,7 +187,8 @@ class _HomeState extends State<Home> {
                         if (_advertisementList != null) {
                           return GestureDetector(
                             child: Image.network(_advertisementList['list'][index]['url'],fit: BoxFit.cover),
-                            onTap: () => Message.warning(context, '我还没开发呢，点J8啊点')
+                            // onTap: () => Message.warning(context, '我还没开发呢，点J8啊点'),
+                            onTap: () => print(ModalRoute.of(context).settings),
                           );
                         }
                       },
@@ -332,7 +371,7 @@ class _HomeState extends State<Home> {
                     child: GestureDetector(
                       child: Row(
                         children: <Widget>[
-                          Text('成都', style: TextStyle(color: Color.fromRGBO(((1 - _distance / _headerHeight) * 255).toInt(), ((1 - _distance / _headerHeight) * 255).toInt(), ((1 - _distance / _headerHeight) * 255).toInt(), 1.0))),
+                          Text(currentCity ?? '？？？？？？？？？', style: TextStyle(color: Color.fromRGBO(((1 - _distance / _headerHeight) * 255).toInt(), ((1 - _distance / _headerHeight) * 255).toInt(), ((1 - _distance / _headerHeight) * 255).toInt(), 1.0))),
                           Icon(
                             Icons.arrow_drop_down,
                             color: Color.fromRGBO(((1 - _distance / _headerHeight) * 255).toInt(), ((1 - _distance / _headerHeight) * 255).toInt(), ((1 - _distance / _headerHeight) * 255).toInt(), 1.0),
@@ -340,7 +379,7 @@ class _HomeState extends State<Home> {
                           )
                         ],
                       ),
-                      onTap: () => Navigator.pushNamed(context, 'address')
+                      onTap: () => Navigator.pushNamed(context, 'address', arguments: {'currentCity': currentCity, 'positionCity': positionCity }),
                     )
                   ),
                   _showHeader
@@ -416,7 +455,7 @@ class _HomeState extends State<Home> {
                               size: 23.0
                             )
                           ),
-                          onTap: () => Navigator.pushNamed(context, 'search')
+                          onTap: () => Navigator.pushNamed(context, 'search'),
                         )
                       ]
                     )

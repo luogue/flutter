@@ -5,6 +5,8 @@ import 'package:yangyue/components/toast.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_simple_video_player/flutter_simple_video_player.dart';
+
 
 class Home extends StatefulWidget {
   Home({Key key}) : super(key: key);
@@ -38,7 +40,7 @@ class _HomeState extends State<Home> {
     // _getHot(context);
     // _getReach(context);
     // _getPerformance(context);
-    // _getRecommend(context);
+    _getRecommend(context);
     // 隐藏顶部状态栏
     // SystemChrome.setEnabledSystemUIOverlays([]);
     // 恢复
@@ -63,8 +65,6 @@ class _HomeState extends State<Home> {
   @override
   void dispose() {
     super.dispose();
-    print('你怎么会被调用呢？？？？？？==================================');
-    // print(currentCity);
     if (currentCity != null) _localStorage.setString('currentCity', currentCity);
   }
 
@@ -80,9 +80,6 @@ class _HomeState extends State<Home> {
   // 获取路有参数
   _getParams() {
     Map params = ModalRoute.of(context).settings.arguments;
-    print('params=========================================');
-    print(params);
-    print( _localStorage.getString('currentCity'));
     setState(() {
       if (params != null) {
         currentCity = params['currentCity'];
@@ -130,7 +127,7 @@ class _HomeState extends State<Home> {
     }).catchError((e) { Message.error(context, '网络请求超时，因为easy-mock接口挂了，暂时没数据，等会儿再试~');});
   }
 
-  // 热门演出
+  // 资讯推荐
   _getRecommend(context) {
     Future res = get(context, api.getRecommend);
     res.then((data) {
@@ -189,8 +186,7 @@ class _HomeState extends State<Home> {
                         if (_advertisementList != null) {
                           return GestureDetector(
                             child: Image.network(_advertisementList['list'][index]['url'],fit: BoxFit.cover),
-                            // onTap: () => Message.warning(context, '我还没开发呢，点J8啊点'),
-                            onTap: () => Message.warning(context, currentCity),
+                            onTap: () => Message.warning(context, '我还没开发呢，点J8啊点'),
                           );
                         }
                       },
@@ -345,6 +341,31 @@ class _HomeState extends State<Home> {
                         )
                       ]
                     )
+                  ),
+                  // 资源推荐
+                  Container(
+                    margin: EdgeInsets.only(top: 10.0),
+                    padding: EdgeInsets.fromLTRB(10.0, 10.0, 0.0, 10.0),
+                    color: Colors.white,
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          margin: EdgeInsets.only(right: 18.0),
+                          child: Text(
+                            '资讯推荐',
+                            style: TextStyle(
+                              fontSize: 18.0
+                            )
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(top: 18.0),
+                          // height: 240.0,
+                          child: _renderRecommend(context, _recommend)
+                        )
+                      ]
+                    )
                   )
                 ]
               )
@@ -382,7 +403,6 @@ class _HomeState extends State<Home> {
                         ],
                       ),
                       onTap: () => Navigator.pushNamed(context, 'address', arguments: {'currentCity': currentCity, 'positionCity': positionCity }),
-                      // onTap: () => print(currentCity),
                     ),
                   ),
                   _showHeader
@@ -390,7 +410,7 @@ class _HomeState extends State<Home> {
                   ? Positioned(
                     top: 0,
                     height: 32.0,
-                    left: 60.0,
+                    left: 70.0,
                     right: 10.0,
                     child: TextField(
                       onTap: () => Navigator.pushNamed(context, 'search'),
@@ -698,6 +718,95 @@ _renderPerformance(context, data) {
   return ListView(
     scrollDirection: Axis.horizontal,
     shrinkWrap: true,
+    children: list
+  );
+}
+
+// 资讯推荐
+_renderRecommend(context, data) {
+  print('data=======================');
+  print(data);
+  if (data == null) return null;
+  List<Widget> list = [];
+  data['list'].forEach((item) {
+    list.add(
+      Container(
+        padding: EdgeInsets.all(10.0),
+        child: Column(
+          children: <Widget>[
+            // 资源发布人
+            item['name'] != null ? GestureDetector(
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    width: 36.0,
+                    height: 36.0,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(36.0),
+                      child: Image.network(
+                        item['avatar'],
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(left: 10.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          item['name'],
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        Text(
+                          item['description'],
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 12.0,
+                            color: Color(0xFF999999),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              onTap: () => Message.warning(context, '查看${item['name']}的信息'),
+            ) : Text(''),
+            // 标题
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 10.0),
+              child: Text(
+                item['title'],
+                style: TextStyle(
+                  fontSize: 16.0,
+                )
+              ),
+            ),
+            item['imgUrl'] != null ? Image.network(
+              item['imgUrl'],
+              fit: BoxFit.cover,
+            )
+            : Container(
+              height: 200.0,
+              child: SimpleViewPlayer(item['videoUrl'], isFullScreen: false),
+            ),
+          ],
+        ),
+        decoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(color: Color(0xFFEEEEEE), width: 1),
+          ),
+          ),
+      )
+    );
+  });
+  return Column(
+    // mainAxisSize: MainAxisSize.max,
+    // shrinkWrap: true,
+    // scrollDirection: Axis.horizontal,
+    // shrinkWrap: true,
+    // mainAxisSize: MainAxisSize.max,
     children: list
   );
 }

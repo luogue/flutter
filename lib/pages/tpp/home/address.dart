@@ -25,8 +25,6 @@ class _AddressState extends State<Address> {
   @override
   void initState() {
     super.initState();
-    // print('初始化==========================');
-    // print(ModalRoute.of(context).settings.arguments);
     _initStorage();
     _getCityList(context);
   }
@@ -114,56 +112,13 @@ class _AddressState extends State<Address> {
         );
     }));
     list.addAll(a);
-      // list.add(
-      //   Expanded(
-      //     flex: 0,
-      //   child: 
-      //   Column(
-      //     mainAxisSize: MainAxisSize.min,
-      //     crossAxisAlignment: CrossAxisAlignment.end,
-      //     children: List<Widget>.from(cityList.map((city) {
-      //       return Container(
-      //         constraints: BoxConstraints.tightForFinite(),
-      //         child: Text(city),
-      //         decoration: BoxDecoration(
-      //           border: Border(
-      //             bottom: BorderSide(color: Color(0xFFEEEEEE), width: 1),
-      //           ),
-      //           color: Colors.white
-      //         ),
-      //       );
-      //     }).toList())
-      //   )
-      //   )
-      // );
     });
     return list;
-    print(_address['cityList'].keys());
-    // _address['cityList'].keys().map((prop) {
-    //   print(prop);
-    // });
-    _address['cityList'].keys().map((prop) {
-      return <Widget>[
-        // 首字母
-        Container(
-          margin: EdgeInsets.fromLTRB(0, 10.0, 0, 10.0),
-          child: Text(
-            prop,
-            style: TextStyle(
-              fontSize: 12.0,
-              color: Color(0xFF000000)
-            )
-          ),
-        ),
-      ];
-    }).toList();
   }
 
   // 获取路有参数
   _getParams() {
-    print('===========================================;');
     Map params = ModalRoute.of(context).settings.arguments;
-    print(params);
     setState(() {
       currentCity = params['currentCity'];
       positionCity = params['positionCity'];
@@ -268,7 +223,7 @@ class _AddressState extends State<Address> {
                     GestureDetector(
                       onTap: currentCity == null
                         ? () => Message.warning(context, '必须先选择一个城市')
-                        : () => Navigator.popAndPushNamed(context, 'home', arguments: {'currentCity': currentCity}),
+                        : () => Navigator.popAndPushNamed(context, 'home', arguments: { 'currentCity': positionCity }),
                       child: Container(
                         margin: EdgeInsets.all(10.0),
                         width: mediaQuery.size.width / 3.5,

@@ -21,13 +21,35 @@ class Entry extends StatelessWidget {
         })
       ),
       drawer: new MyDrawer(),
-      body: new Center(
-        child: new Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+      body: Container(
+        child: ListView(
           children: <Widget>[
-            Text('月月的个人项目，可以打开左上角的菜单选项进行跳转'),
+            Container(
+              alignment: Alignment.topLeft,
+              child: Image(
+                image: AssetImage("assets/images/nav.gif"),
+                width: 160.0,
+                height: 160.0,
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 120.0),
+              child: Text(
+                '月月的个人项目，可以打开左上角的菜单选项进行跳转',
+                textAlign: TextAlign.center,
+              ),
+            ),
+            Container(
+              alignment: Alignment.bottomRight,
+              margin: EdgeInsets.fromLTRB(0, 210, 0, 0),
+              child: Image(
+                image: AssetImage("assets/images/yueyue.gif"),
+                width: 150.0,
+                height: 150.0,
+              ),
+            ),
           ],
-        ),
+        )
       )
     );
   }
@@ -37,7 +59,6 @@ class MyDrawer extends StatelessWidget {
   const MyDrawer({
     Key key,
   }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Drawer(

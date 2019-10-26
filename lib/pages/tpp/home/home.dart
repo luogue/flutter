@@ -37,9 +37,9 @@ class _HomeState extends State<Home> {
     //初始化状态
     _initStorage();
     _getAdvertisementList(context);
-    // _getHot(context);
-    // _getReach(context);
-    // _getPerformance(context);
+    _getHot(context);
+    _getReach(context);
+    _getPerformance(context);
     _getRecommend(context);
     // 隐藏顶部状态栏
     // SystemChrome.setEnabledSystemUIOverlays([]);
@@ -789,7 +789,10 @@ _renderRecommend(context, data) {
             )
             : Container(
               height: 200.0,
-              child: SimpleViewPlayer(item['videoUrl'], isFullScreen: false),
+              child: SimpleViewPlayer(
+                item['videoUrl'],
+                isFullScreen: false
+              ),
             ),
           ],
         ),
@@ -802,11 +805,6 @@ _renderRecommend(context, data) {
     );
   });
   return Column(
-    // mainAxisSize: MainAxisSize.max,
-    // shrinkWrap: true,
-    // scrollDirection: Axis.horizontal,
-    // shrinkWrap: true,
-    // mainAxisSize: MainAxisSize.max,
     children: list
   );
 }

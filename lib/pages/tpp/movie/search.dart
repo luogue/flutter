@@ -54,7 +54,7 @@ class _SearchState extends State<Search> {
         _hotSearch = List<String>.from(data['list']);
       });
     }).catchError((e) {
-      Message.error(context, '网络请求超时，因为easy-mock接口挂了，等会儿再试~');
+      Message.error(context, '网络请求超时，等会儿再试~');
     });
   }
 
@@ -69,7 +69,7 @@ class _SearchState extends State<Search> {
         _searchResult = data;
       });
     }).catchError((e) {
-      Message.error(context, '网络请求超时，因为easy-mock接口挂了，等会儿再试~');
+      Message.error(context, '网络请求超时，等会儿再试~');
     });
   }
 
@@ -254,6 +254,7 @@ class _SearchState extends State<Search> {
                   item['image'],
                   fit: BoxFit.cover,
                 ),
+                // child: Text(item['image']),
               ),
             ),
             Expanded(
@@ -264,6 +265,7 @@ class _SearchState extends State<Search> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: type == 'actors'
+                  // 演员
                   ? <Widget>[
                     Text(
                       item['name'],
@@ -280,6 +282,7 @@ class _SearchState extends State<Search> {
                       style: TextStyle(color: Color(0xFF999999))
                     )
                   ]
+                  // 电影列表
                   : <Widget>[
                     Text(
                       item['name'],
@@ -288,6 +291,7 @@ class _SearchState extends State<Search> {
                       )
                     ),
                     item['status'] == 2
+                    // 未上映
                     ? Row(
                       children: <Widget>[
                         Text(
@@ -300,6 +304,7 @@ class _SearchState extends State<Search> {
                         Text(' 人想看'),
                       ],
                     )
+                    // 已上映
                     : Row(
                       children: <Widget>[
                         Text('淘票票评分 '),
@@ -316,6 +321,8 @@ class _SearchState extends State<Search> {
                       item['actors'].fold('', (preValue, actor) {
                         return preValue + actor + ' ';
                       }),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(color: Color(0xFF999999))
                     ),
                     Row(

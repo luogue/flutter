@@ -1,11 +1,10 @@
 void main() {
-  Map a = {
-    'a': 1,
-    'b': 2,
-  };
-  a.map((prop, value) {
-    print ('prop：$prop');
-    print ('value：$value');
-    return prop.toUpperCase();
+  List list = [
+    {'x': [1,2,3]},
+    {'y': [11,22,33]}
+  ];
+  list.forEach((var a) {
+    print('=========================');
+    print(a);
   });
 }

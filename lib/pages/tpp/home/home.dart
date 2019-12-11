@@ -177,12 +177,16 @@ class _HomeState extends State<Home> {
                 padding: EdgeInsets.all(0),
                 controller: _controller,
                 children: <Widget>[
+                  // ══╡ EXCEPTION CAUGHT BY WIDGETS LIBRARY ╞═══════════════════════════════════════════════════════════
+                  // The following assertion was thrown building Swiper(state: _SwiperState#747df):
+                  // swiper 嵌套在listview（scrollview）中 的时候会报ScrollController not attached to any scroll views.
+                  // 做一个数据可能为空的容错就好了
                   // 轮播图
-                  Container(
+                  _advertisementList != null ? Container(
                     height: 245.0,
                     color: Colors.orange,
                     child: Swiper(
-                      itemBuilder: (BuildContext context,int index){
+                      itemBuilder: (BuildContext context, int index) {
                         if (_advertisementList != null) {
                           return GestureDetector(
                             child: Image.network(_advertisementList['list'][index]['url'],fit: BoxFit.cover),
@@ -203,7 +207,7 @@ class _HomeState extends State<Home> {
                         ),
                       )
                     ),
-                  ),
+                  ) : Container(child: Text('hello world'),),
                   // 热映影片
                   Container(
                     padding: EdgeInsets.fromLTRB(10.0, 10.0, 0.0, 10.0),
@@ -724,8 +728,6 @@ _renderPerformance(context, data) {
 
 // 资讯推荐
 _renderRecommend(context, data) {
-  print('data=======================');
-  print(data);
   if (data == null) return null;
   List<Widget> list = [];
   data['list'].forEach((item) {

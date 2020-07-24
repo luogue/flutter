@@ -32,14 +32,14 @@ class _VideoState extends State<Video> {
     var res = get(context, api.getAdvertisementList);
     res.then((data) {
       setState(() { _advertisementList = data; });
-    })..catchError((e) { Message.error(context, '网络请求超时，因为easy-mock接口挂了，暂时没数据，等会儿再试~');});
+    })..catchError((e) { Message.error(context, '网络请求超时，因为接口挂了，暂时没数据，等会儿再试~');});
   }
   // 热映影片
   _getHot(context) {
     var res = get(context, api.getHot);
     res.then((data) {
       setState(() { _hot = data; });
-    })..catchError((e) { Message.error(context, '网络请求超时，因为easy-mock接口挂了，暂时没数据，等会儿再试~');});
+    })..catchError((e) { Message.error(context, '网络请求超时，因为接口挂了，暂时没数据，等会儿再试~');});
   }
   // // 即将上映
   _getReach(context) {
@@ -48,7 +48,7 @@ class _VideoState extends State<Video> {
       setState(() {
         _reach = data;
       });
-    })..catchError((e) { Message.error(context, '网络请求超时，因为easy-mock接口挂了，暂时没数据，等会儿再试~');});
+    })..catchError((e) { Message.error(context, '网络请求超时，因为接口挂了，暂时没数据，等会儿再试~');});
   }
   // 热门演出
   _getPerformance(context) {
@@ -57,7 +57,7 @@ class _VideoState extends State<Video> {
       setState(() {
         _performance = data;
       });
-    })..catchError((e) { Message.error(context, '网络请求超时，因为easy-mock接口挂了，暂时没数据，等会儿再试~');});
+    })..catchError((e) { Message.error(context, '网络请求超时，因为接口挂了，暂时没数据，等会儿再试~');});
   }
 
   // 点击tab

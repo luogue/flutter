@@ -97,7 +97,7 @@ class _HomeState extends State<Home> {
         _advertisementList = data;
       });
     // }).catchError((e) { Message.error(context, e.toString()); });
-    }).catchError((e) { Message.error(context, '网络请求超时，因为easy-mock接口挂了，暂时没数据，等会儿再试~');});
+    }).catchError((e) { Message.error(context, '网络请求超时，因为接口挂了，暂时没数据，等会儿再试~');});
   }
 
   // 热映影片
@@ -105,7 +105,7 @@ class _HomeState extends State<Home> {
     Future res = get(context, api.getHot);
     res.then((data) {
       setState(() { _hot = data; });
-    }).catchError((e) { Message.error(context, '网络请求超时，因为easy-mock接口挂了，暂时没数据，等会儿再试~');});
+    }).catchError((e) { Message.error(context, '网络请求超时，因为接口挂了，暂时没数据，等会儿再试~');});
   }
 
   // 即将上映
@@ -115,7 +115,7 @@ class _HomeState extends State<Home> {
       setState(() {
         _reach = data;
       });
-    }).catchError((e) { Message.error(context, '网络请求超时，因为easy-mock接口挂了，暂时没数据，等会儿再试~');});
+    }).catchError((e) { Message.error(context, '网络请求超时，因为接口挂了，暂时没数据，等会儿再试~');});
   }
   // 热门演出
   _getPerformance(context) {
@@ -124,7 +124,7 @@ class _HomeState extends State<Home> {
       setState(() {
         _performance = data;
       });
-    }).catchError((e) { Message.error(context, '网络请求超时，因为easy-mock接口挂了，暂时没数据，等会儿再试~');});
+    }).catchError((e) { Message.error(context, '网络请求超时，因为接口挂了，暂时没数据，等会儿再试~');});
   }
 
   // 资讯推荐
@@ -134,7 +134,7 @@ class _HomeState extends State<Home> {
       setState(() {
         _recommend = data;
       });
-    }).catchError((e) { Message.error(context, '网络请求超时，因为easy-mock接口挂了，暂时没数据，等会儿再试~');});
+    }).catchError((e) { Message.error(context, '网络请求超时，因为接口挂了，暂时没数据，等会儿再试~');});
   }
 
   // 点击tab

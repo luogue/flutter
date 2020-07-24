@@ -9,7 +9,7 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="天生大脸林二妹"
+        android:label="月亮"
         tools:replace="android:label"
         android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">

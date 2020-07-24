@@ -23,9 +23,7 @@ class MyApp extends StatelessWidget {
     var a = DateTime.now().millisecondsSinceEpoch;
     print (a);
     return new MaterialApp(
-      // title: '星璃丶鲁尼答',
-      // title: '毛毛是个死胖子',
-      title: '还是个小短腿哟',
+      title: '这是一个 flutter 应用',
       theme: (
         new ThemeData(
           primaryColor: Colors.deepOrange,

@@ -13,7 +13,7 @@
     <li>2</li>
     <li>3</li>
   </ul>
-  <a href="https://baidu.com">11111111111</a>
+  <a href="https://baidu.com">百度一下，你就知道了</a>
   <div class="drawer"></div>
   <div class="drawer"></div>
   <div class="drawer"></div>
@@ -35,7 +35,17 @@ html, body {
 </style>
 <script>
 // 初始化
-var vConsole = new VConsole();
+// var vConsole = new VConsole();
+window.onload = function () {
+    console.log('onload============================');
+    // localStorage
+    // console.log(window.localStorage);
+    // if (typeof window.localStorage !== 'undefined' && window.localStorage) {
+    //     console.log('localStorage===========================================')
+    //     var vConsole = new VConsole();
+    // }
+    var vConsole = new VConsole();
+}
 </script>
 </body>
 </html>

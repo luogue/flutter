@@ -4,8 +4,8 @@ import 'package:dio/dio.dart';
 import 'package:yangyue/components/toast.dart';
 
 Dio dio = new Dio(new BaseOptions(
-  // baseUrl: 'https://www.easy-mock.com/mock/5ce761defcd92434dcbd613c/tpp/api',
-  baseUrl: 'http://yapi.demo.qunar.com/mock/51936/api',
+  baseUrl: 'https://www.easy-mock.com/mock/5ce761defcd92434dcbd613c/tpp/api',
+  // baseUrl: 'http://yapi.demo.qunar.com/mock/51936/api',
   connectTimeout: 5000,
   receiveTimeout: 10000
 ));

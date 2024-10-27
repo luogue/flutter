@@ -1,0 +1,18 @@
+{
+    "sourceFile": "android/build.gradle",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1730019253086,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1730019253086,
+            "name": "Commit-0",
+            "content": "buildscript {\r\n    repositories {\r\n        maven { url 'https://maven.aliyun.com/repository/google' }\r\n        maven { url 'https://maven.aliyun.com/repository/jcenter' }\r\n        maven { url 'http://maven.aliyun.com/nexus/content/groups/public' }\r\n        google()\r\n        jcenter()\r\n    }\r\n\r\n\r\n    dependencies {\r\n        classpath 'com.android.tools.build:gradle:3.2.1'\r\n    }\r\n}\r\n\r\nallprojects {\r\n    repositories {\r\n        maven { url 'https://maven.aliyun.com/repository/google' }\r\n        maven { url 'https://maven.aliyun.com/repository/jcenter' }\r\n        maven { url 'http://maven.aliyun.com/nexus/content/groups/public' }\r\n        google()\r\n        jcenter()\r\n    }\r\n}\r\n\r\nrootProject.buildDir = '../build'\r\nsubprojects {\r\n    project.buildDir = \"${rootProject.buildDir}/${project.name}\"\r\n}\r\nsubprojects {\r\n    project.evaluationDependsOn(':app')\r\n}\r\n\r\ntask clean(type: Delete) {\r\n    delete rootProject.buildDir\r\n}\r\n"
+        }
+    ]
+}

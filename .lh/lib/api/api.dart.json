@@ -1,0 +1,18 @@
+{
+    "sourceFile": "lib/api/api.dart",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1730019235227,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1730019235227,
+            "name": "Commit-0",
+            "content": "class Api {\r\n  // 首页\r\n  final String getAdvertisementList = '/advertisementList';\r\n  final String getHot = '/hot';\r\n  final String getReach = '/reach';\r\n  final String getPerformance = '/performance';\r\n  final String getRecommend = '/recommend';\r\n  final String getCityList = '/city';\r\n  // 搜索页\r\n  final String searchResource = '/searchResource';\r\n  final String hotSearch = '/hotSearch';\r\n}\r\n\r\nfinal api = new Api();\r\n\r\n"
+        }
+    ]
+}

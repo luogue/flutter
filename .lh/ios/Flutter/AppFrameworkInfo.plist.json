@@ -1,0 +1,18 @@
+{
+    "sourceFile": "ios/Flutter/AppFrameworkInfo.plist",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1730019239343,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1730019239343,
+            "name": "Commit-0",
+            "content": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\r\n<plist version=\"1.0\">\r\n<dict>\r\n\r\n  <key>CFBundleDevelopmentRegion</key>\r\n  <string>en</string>\r\n  <key>CFBundleExecutable</key>\r\n  <string>App</string>\r\n  <key>CFBundleIdentifier</key>\r\n  <string>io.flutter.flutter.app</string>\r\n  <key>CFBundleInfoDictionaryVersion</key>\r\n  <string>6.0</string>\r\n  <key>CFBundleName</key>\r\n  <string>App</string>\r\n  <key>CFBundlePackageType</key>\r\n  <string>FMWK</string>\r\n  <key>CFBundleShortVersionString</key>\r\n  <string>1.0</string>\r\n  <key>CFBundleSignature</key>\r\n  <string>????</string>\r\n  <key>CFBundleVersion</key>\r\n  <string>1.0</string>\r\n  <key>MinimumOSVersion</key>\r\n  <string>8.0</string>\r\n</dict>\r\n</plist>\r\n"
+        }
+    ]
+}

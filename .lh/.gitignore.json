@@ -1,0 +1,18 @@
+{
+    "sourceFile": ".gitignore",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1730019228652,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1730019228652,
+            "name": "Commit-0",
+            "content": "# Miscellaneous\r\n*.class\r\n*.log\r\n*.pyc\r\n*.swp\r\n.DS_Store\r\n.atom/\r\n.buildlog/\r\n.history\r\n.svn/\r\n\r\n\r\n# IntelliJ related\r\n*.iml\r\n*.ipr\r\n*.iws\r\n.idea/\r\n\r\n# Visual Studio Code related\r\n.vscode/\r\n\r\n# Flutter/Dart/Pub related\r\n**/doc/api/\r\n.dart_tool/\r\n.flutter-plugins\r\n.packages\r\n.pub-cache/\r\n.pub/\r\n/build/\r\n\r\n# Android related\r\n**/android/**/gradle-wrapper.jar\r\n**/android/.gradle\r\n**/android/captures/\r\n**/android/gradlew\r\n**/android/gradlew.bat\r\n**/android/local.properties\r\n**/android/**/GeneratedPluginRegistrant.java\r\n\r\n# iOS/XCode related\r\n**/ios/**/*.mode1v3\r\n**/ios/**/*.mode2v3\r\n**/ios/**/*.moved-aside\r\n**/ios/**/*.pbxuser\r\n**/ios/**/*.perspectivev3\r\n**/ios/**/*sync/\r\n**/ios/**/.sconsign.dblite\r\n**/ios/**/.tags*\r\n**/ios/**/.vagrant/\r\n**/ios/**/DerivedData/\r\n**/ios/**/Icon?\r\n**/ios/**/Pods/\r\n**/ios/**/.symlinks/\r\n**/ios/**/profile\r\n**/ios/**/xcuserdata\r\n**/ios/.generated/\r\n**/ios/Flutter/App.framework\r\n**/ios/Flutter/Flutter.framework\r\n**/ios/Flutter/Generated.xcconfig\r\n**/ios/Flutter/app.flx\r\n**/ios/Flutter/app.zip\r\n**/ios/Flutter/flutter_assets/\r\n**/ios/ServiceDefinitions.json\r\n**/ios/Runner/GeneratedPluginRegistrant.*\r\n\r\n# Exceptions to above rules.\r\n!**/ios/**/default.mode1v3\r\n!**/ios/**/default.mode2v3\r\n!**/ios/**/default.pbxuser\r\n!**/ios/**/default.perspectivev3\r\n!/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages\r\n"
+        }
+    ]
+}

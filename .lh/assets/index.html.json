@@ -1,0 +1,18 @@
+{
+    "sourceFile": "assets/index.html",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1730019244134,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1730019244134,
+            "name": "Commit-0",
+            "content": "<!DOCTYPE html>\r\n<html>\r\n<head>\r\n<meta charset=\"utf-8\">\r\n<meta name=\"viewport\" content=\"width=device-width,initial-scale=1.0\">\r\n<title>webview网页</title>\r\n<script src=\"https://cdn.bootcss.com/vConsole/3.3.0/vconsole.min.js\"></script>\r\n</head>\r\n<body>\r\n  \r\n  <div>webview网页</div>\r\n  <ul>\r\n    <li>1</li>\r\n    <li>2</li>\r\n    <li>3</li>\r\n  </ul>\r\n  <a href=\"https://baidu.com\">百度一下，你就知道了</a>\r\n  <div class=\"drawer\"></div>\r\n  <div class=\"drawer\"></div>\r\n  <div class=\"drawer\"></div>\r\n  <div class=\"drawer\"></div>\r\n  <div class=\"drawer\"></div>\r\n  <div class=\"drawer\"></div>\r\n<style>\r\nhtml, body {\r\n  margin: 0;\r\n  padding: 0;\r\n}\r\n.drawer {\r\n  margin: 10px auto;\r\n  width: 200px;\r\n  height: 200px;\r\n  background: red;\r\n\r\n}\r\n</style>\r\n<script>\r\n// 初始化\r\n// var vConsole = new VConsole();\r\nwindow.onload = function () {\r\n    console.log('onload============================');\r\n    // localStorage\r\n    // console.log(window.localStorage);\r\n    // if (typeof window.localStorage !== 'undefined' && window.localStorage) {\r\n    //     console.log('localStorage===========================================')\r\n    //     var vConsole = new VConsole();\r\n    // }\r\n    var vConsole = new VConsole();\r\n}\r\n</script>\r\n</body>\r\n</html>"
+        }
+    ]
+}

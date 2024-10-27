@@ -1,0 +1,18 @@
+{
+    "sourceFile": "test.dart",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1730019226221,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1730019226221,
+            "name": "Commit-0",
+            "content": "void main() {\r\n  List list = [\r\n    {'x': [1,2,3]},\r\n    {'y': [11,22,33]}\r\n  ];\r\n  list.forEach((var a) {\r\n    print('=========================');\r\n    print(a);\r\n  });\r\n}\r\n\r\n"
+        }
+    ]
+}
